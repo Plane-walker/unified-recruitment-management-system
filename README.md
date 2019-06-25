@@ -1,2 +1,2 @@
 # unified-recruitment-management-system
-统一招聘管理平台
+统一招聘管理系统
