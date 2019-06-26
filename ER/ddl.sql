@@ -23,7 +23,7 @@ create table company
 create table applicant
 (
    ID                   varchar(20) not null,
-   pwHsah               varchar(32),
+   pwHash               varchar(32),
    name                 varchar(20),
    com_ID               varchar(20),
    gender               varchar(4),
