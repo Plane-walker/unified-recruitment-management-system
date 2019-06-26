@@ -31,7 +31,6 @@ public class Applicant extends Account {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		System.out.println(info);
 		return info;
 	}
 
@@ -66,6 +65,7 @@ public class Applicant extends Account {
 			psta=conn.prepareStatement("select * from applicant"
 					+ " where ID=? and pwHash=?");
 			psta.setString(1, userID);
+			psta.setString(2, pwHash);
 			rs=psta.executeQuery();
 			if(!rs.next()) {
 			psta=conn.prepareStatement(
