@@ -9,6 +9,7 @@ abstract public class Account {
 	String ID=null;
 	String name=null;
 	String country=null;
+	String avator=null;
 	public abstract String login(HttpServletRequest request);
 	public abstract String register(HttpServletRequest request);
 	public void setID(String ID) {
@@ -23,6 +24,10 @@ abstract public class Account {
 		if(this.country==null)
 		this.country=country;
 	}
+	public void setavator(String avator) {
+		if(this.avator==null)
+		this.avator=avator;
+	}
 	public String getID() {
 		return ID;
 	}
@@ -31,6 +36,9 @@ abstract public class Account {
 	}
 	public String getcountry() {
 		return country;
+	}
+	public String getavator() {
+		return avator;
 	}
 	String getmd5(String input) {
 		if(input==null)

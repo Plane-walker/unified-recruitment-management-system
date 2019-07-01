@@ -8,7 +8,7 @@
 <script type="text/javascript" src="jquery-3.4.1.min.js" ></script>
 <script src="bootstrap-4.3.1-dist/js/bootstrap.min.js"></script>
 <meta charset="UTF-8">
-<title>注册</title>
+<title>注册-统一招聘管理系统</title>
 <%session.removeAttribute("logwarn");%>
 <style>
             /*web background*/
@@ -39,7 +39,11 @@ request.setCharacterEncoding("utf-8"); %>
 <div class="container">
 <div class="row row-centered">
 <div class="well col-md-6 col-centered">
-<h2 class="text-primary text-center"><a href="main">注册</a></h2>
+<div class='card mb-4 shadow'>
+<div class='card-header'>
+<h2 class="text-primary text-center"><a href="main">统一招聘管理系统</a>|注册</h2>
+</div>
+<div class='card-body'>
 <form action="Regserv" method="post">
         <div class="form-group form-inline">
             <label class="control-label col-md-4">*用户名：</label>
@@ -88,6 +92,8 @@ request.setCharacterEncoding("utf-8"); %>
             <div class="col-md-4"><font color="red"><%if((String)session.getAttribute("regwarn")!=null)out.print((String)session.getAttribute("regwarn"));%></font></div>
         </div>
 </form>
+</div>
+</div>
 </div>
 </div>
 </div>

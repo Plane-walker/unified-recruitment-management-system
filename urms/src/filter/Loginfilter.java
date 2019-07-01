@@ -34,22 +34,24 @@ public class Loginfilter implements Filter {
 	 * @see Filter#doFilter(ServletRequest, ServletResponse, FilterChain)
 	 */
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+		request.setCharacterEncoding("UTF-8");
 		HttpServletResponse resp = (HttpServletResponse)response;
         HttpServletRequest req = (HttpServletRequest)request;
         HttpSession session = req.getSession();
         String ID = (String)session.getAttribute("ID");
+        String type=(String)session.getAttribute("type");
         String uri = req.getRequestURI();
-        if(ID==null&&!(uri.endsWith("main.jsp")||uri.endsWith("login_app.jsp")||uri.endsWith("login_com.jsp")||uri.endsWith("register_app.jsp")||uri.endsWith("register_com.jsp"))){
-            if(uri.endsWith("login.jsp")){
-                chain.doFilter(request, response);
-            }else{
-                resp.sendRedirect(req.getContextPath()+"/login");
-            }    
-        }else{
-            chain.doFilter(request, response);
-        }
+        if(ID==null)
+        	resp.sendRedirect(req.getContextPath()+"/main");
+        else
+        	if((type.equals("login_app")||type.equals("register_app"))&&!uri.endsWith("market"))
+        		resp.sendRedirect(req.getContextPath()+"/market");
+        	else
+        		if((type.equals("login_com")||type.equals("register_com"))&&!uri.endsWith("table"))
+        			resp.sendRedirect(req.getContextPath()+"/table");
+        		else
+        	chain.doFilter(request, response);
 	}
-
 	/**
 	 * @see Filter#init(FilterConfig)
 	 */

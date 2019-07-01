@@ -23,4 +23,12 @@
         <from>^/register_com$</from>  
         <to type="forward">/register_com.jsp</to>
     </rule>
+    <rule>
+        <from>^/market$</from>  
+        <to type="forward">/market.jsp</to>
+    </rule>
+    <rule>
+        <from>^/table$</from>  
+        <to type="forward">/table.jsp</to>
+    </rule>
 </urlrewrite>

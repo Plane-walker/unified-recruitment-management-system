@@ -7,7 +7,7 @@
 <script src="jquery-3.4.1.min.js" ></script>
 <script src="bootstrap-4.3.1-dist/js/bootstrap.min.js"></script>
 <meta charset="UTF-8">
-<title>登录</title>
+<title>登录-统一招聘管理系统</title>
 <%session.removeAttribute("regwarn");%>
 <style>
             /*web background*/
@@ -36,7 +36,11 @@
 <div class="container">
 <div class="row row-centered">
 <div class="well col-md-6 col-centered">
-<h2 class="text-primary text-center"><a href="main">登录</a></h2>
+<div class='card mb-4 shadow'>
+<div class='card-header'>
+<h2 class="text-primary text-center"><a href="main">统一招聘管理系统</a>|登录</h2>
+</div>
+<div class='card-body'>
 <form role="form" action="Logserv" method="post">
         <div class="form-group form-inline">
             <label class="control-label col-md-3">用户名：</label>
@@ -51,7 +55,10 @@
             <div class="col-md-2"><a href="register_app">注册</a></div>
             <div class="col-md-6"><font color="red"><%if((String)session.getAttribute("logwarn")!=null)out.print((String)session.getAttribute("logwarn"));%></font></div>
             </div>
+            
 </form>
+</div>
+</div>
 </div>
 </div>
 </div>

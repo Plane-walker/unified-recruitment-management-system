@@ -1,8 +1,6 @@
 package servlet;
 
 import java.io.IOException;
-import java.net.URL;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -15,7 +13,7 @@ import account.Applicant;
 import account.Company;
 
 /**
- * Servlet implementation class logserv
+ * Servlet implementation class Logserv
  */
 @WebServlet("/Logserv")
 public class Logserv extends HttpServlet {
@@ -40,6 +38,7 @@ public class Logserv extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
 		HttpSession session = request.getSession();
 		Account acc=null;
 		String url=request.getHeader("Referer");
@@ -56,9 +55,14 @@ public class Logserv extends HttpServlet {
 		}
 		else {
 			session.removeAttribute("logwarn");
-			session.setAttribute("ID", request.getAttribute("ID"));
-			session.setAttribute("name", request.getAttribute("name"));
-			session.setAttribute("type", request.getAttribute(url));
+			session.setAttribute("ID", request.getParameter("userID"));
+			session.setAttribute("name", acc.getname());
+			session.setAttribute("avator", acc.getavator());
+			session.setAttribute("type", url);
+			if(url.equals("login_app")) 
+			response.sendRedirect("market");
+			else
+				response.sendRedirect("table");
 		}
 	}
 

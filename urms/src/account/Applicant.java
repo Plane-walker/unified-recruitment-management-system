@@ -27,6 +27,10 @@ public class Applicant extends Account {
 			rs=psta.executeQuery();
 			if(!rs.next())
 				info="用户名或密码错误！";
+			else {
+				setname(rs.getString("name"));
+				setavator(rs.getString("avator"));
+			}
 			JDBCutil_c3p0.release(rs, psta, conn);
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -69,13 +73,14 @@ public class Applicant extends Account {
 			rs=psta.executeQuery();
 			if(!rs.next()) {
 			psta=conn.prepareStatement(
-					"insert into applicant(ID,name,pwHash,gender,country)"
-					+ " value(?,?,?,?,?) ");
+					"insert into applicant(ID,name,pwHash,gender,country,avator)"
+					+ " value(?,?,?,?,?,?) ");
 			psta.setString(1, userID);
 			psta.setString(2, username);
 			psta.setString(3, pwHash);
 			psta.setString(4, gender);
 			psta.setString(5, country);
+			psta.setString(6, "images/origin.jpg");
 			psta.executeUpdate();
 			}
 			else {

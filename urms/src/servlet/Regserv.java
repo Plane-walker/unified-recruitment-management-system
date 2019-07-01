@@ -24,7 +24,6 @@ public class Regserv extends HttpServlet {
      */
     public Regserv() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
 	/**
@@ -38,6 +37,7 @@ public class Regserv extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
 		HttpSession session = request.getSession();
 		Account acc=null;
 		String url=request.getHeader("Referer");
@@ -54,9 +54,14 @@ public class Regserv extends HttpServlet {
 		}
 		else {
 			session.removeAttribute("regwarn");
-			session.setAttribute("ID", request.getAttribute("ID"));
-			session.setAttribute("name", request.getAttribute("name"));
-			session.setAttribute("type", request.getAttribute(url));
+			session.setAttribute("ID", request.getParameter("userID"));
+			session.setAttribute("name", request.getParameter("username"));
+			session.setAttribute("avator", "images/origin.jpg");
+			session.setAttribute("type", url);
+			if(url.equals("register_app"))
+			response.sendRedirect("market");
+			else
+				response.sendRedirect("table");
 		}
 		
 	}

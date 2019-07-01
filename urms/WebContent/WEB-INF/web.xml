@@ -10,6 +10,10 @@
     <welcome-file>main.jsp</welcome-file>
   </welcome-file-list>
   <filter>
+    <filter-name>Loginfiter</filter-name>
+    <filter-class>filter.Loginfilter</filter-class>
+  </filter>
+  <filter>
     <filter-name>UrlRewriteFilter</filter-name>
     <filter-class>org.tuckey.web.filters.urlrewrite.UrlRewriteFilter</filter-class>
     <init-param>
@@ -25,6 +29,13 @@
       <param-value>DEBUG</param-value>
     </init-param>
   </filter>
+  <filter-mapping>
+    <filter-name>Loginfiter</filter-name>
+    <url-pattern>/market</url-pattern>
+    <url-pattern>/market.jsp</url-pattern>
+    <url-pattern>/table</url-pattern>
+    <url-pattern>/table.jsp</url-pattern>
+  </filter-mapping>
   <filter-mapping>
     <filter-name>UrlRewriteFilter</filter-name>
     <url-pattern>/*</url-pattern>

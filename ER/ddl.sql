@@ -13,7 +13,7 @@ create table company
    pwHash               varchar(32),
    name                 varchar(20),
    country              varchar(20),
-   avator               varchar(150),
+   avator               varchar(150) not null,
    primary key (ID)
 );
 
@@ -23,19 +23,20 @@ create table company
 create table applicant
 (
    ID                   varchar(20) not null,
-   pwHash               varchar(32),
-   name                 varchar(20),
+   pwHash               varchar(32) not null,
+   name                 varchar(20) not null,
    com_ID               varchar(20),
-   gender               varchar(4),
-   country              varchar(20),
+   gender               varchar(4) not null,
+   country              varchar(20) not null,
    phone                varchar(20),
    email                varchar(40),
-   avator               varchar(150),
+   avator               varchar(150) not null,
    primary key (ID)
 );
 
 alter table applicant add constraint FK_Reference_3 foreign key (com_ID)
       references company (ID) on delete restrict on update restrict;
+
 
 /*==============================================================*/
 /* Table: positions                                             */
@@ -43,15 +44,18 @@ alter table applicant add constraint FK_Reference_3 foreign key (com_ID)
 create table positions
 (
    com_ID               varchar(20) not null,
+   com_name             varchar(20) not null,
    name                 varchar(20) not null,
    information          varchar(150),
    begintime            datetime not null,
    endtime              datetime not null,
-   primary key (com_ID, name, begintime, endtime)
+   hits                 bigint not null,
+   primary key (com_ID, name)
 );
 
 alter table positions add constraint FK_Reference_4 foreign key (com_ID)
       references company (ID) on delete restrict on update restrict;
+
 
 
 /*==============================================================*/
