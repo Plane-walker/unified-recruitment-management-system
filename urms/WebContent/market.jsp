@@ -20,6 +20,37 @@ var com_ID="";
 var com_name="";
 var pos_name="";
 var page=1;
+var last=false;
+function psw(){
+	var html="";
+	if(!((last&&page==1)||com_ID!=""||com_name!=""||pos_name!="")){
+	if(page>1)
+		html+="<button class='control-label col-md-2 btn btn-info' onclick='switchp()'>上一页</button>";
+	html+="<label class='control-label col-md-1'>第</label>";
+    html+="<input type='text' class='form-control col-md-1' id='paget' name='paget' value='${paget}' autocomplete='off'>";
+    html+="<button class='control-label col-md-2 btn btn-info' onclick='switchl()'>下一页</button>";
+    html+="<button class='control-label col-md-2 btn btn-info' onclick='jump()'>跳页</button>";
+    $("#pageswitch").html(html);
+    $("#paget").val(page);
+    }
+}
+function switchl(){
+	if(!last){
+	page++;
+	refresh();
+	psw();
+	}
+}
+function switchp(){
+	page--;
+	refresh();
+	psw();
+}
+function jump(){
+	page=$("#paget").val();
+	refresh();
+	psw();
+}
 function refresh(){
 	  var url = "Refreshserv";
 	  var data = {"com_ID":com_ID,"com_name":com_name,"pos_name":pos_name,"size":"9","page":page};
@@ -31,7 +62,7 @@ function refresh(){
 	   timeout:1000,
 	   success:function(dates){
 		   var html="";
-		   if(dates.length<10)
+		   if(dates.length<9)
 			   last=true;
 		   else
 			   last=false;
@@ -67,6 +98,7 @@ function refresh(){
 		   }
 			   }
 		   $("#poscard").html(html);
+		   psw();
 	   },
 	   error:function() {
 	       }
@@ -137,6 +169,7 @@ $(function(){
         </div>
     </nav>
     <div id="poscard" class="fixborder movement"></div>
+    <div id="pageswitch" class="fixborder movement form-group form-inline col-md-8 offset-3"></div>
 </div>
 </div>
 <script type="text/javascript">
@@ -144,6 +177,7 @@ $(document).ready(function () {
     $('#sidebarCollapse').on('click', function () {
         $('#sidebar').toggleClass('active');
         $('#poscard').toggleClass('fixborder');
+        $('#pageswitch').toggleClass('fixborder');
     });
     $("#poscard").on('click','.details',function () {
     	var aimcard=$(this).parent().parent();
