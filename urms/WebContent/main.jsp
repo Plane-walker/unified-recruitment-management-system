@@ -9,34 +9,9 @@
 <meta charset="UTF-8">
 <title>统一招聘管理系统</title>
 <%session.removeAttribute("logwarn");session.removeAttribute("regwarn");%>
-<style>
-            /*web background*/
-            .container{
-                display:table;
-                height:100%;
-            }
-
-            .row{
-                display: table-cell;
-                vertical-align: middle;
-            }
-            /* centered columns styles */
-            .row-centered {
-                text-align:center;
-            }
-            .col-centered {
-                display:inline-block;
-                float:none;
-                text-align:left;
-                margin-right:-4px;
-            }
-        </style>
 </head>
 <body>
-<div class="container">
-<div class="row row-centered">
-<div class="well col-md-6 col-centered">
-<div class='card mb-4 shadow-sm'>
+<div class='card mb-4 shadow-sm col-md-4 offset-4'>
 <div class='card-header'>
 <h2 class="text-primary text-center">统一招聘管理系统</h2>
 </div>
@@ -56,9 +31,6 @@
 </div>
 <div class='card-body'>
 <a href="login_com">>>登录入口</a>
-</div>
-</div>
-</div>
 </div>
 </div>
 </div>

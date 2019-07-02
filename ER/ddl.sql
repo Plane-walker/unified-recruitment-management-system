@@ -37,7 +37,6 @@ create table applicant
 alter table applicant add constraint FK_Reference_3 foreign key (com_ID)
       references company (ID) on delete restrict on update restrict;
 
-
 /*==============================================================*/
 /* Table: positions                                             */
 /*==============================================================*/
@@ -47,9 +46,12 @@ create table positions
    com_name             varchar(20) not null,
    name                 varchar(20) not null,
    information          varchar(150),
-   begintime            datetime not null,
-   endtime              datetime not null,
    hits                 bigint not null,
+   salary               double not null,
+   city                 varchar(20) not null,
+   academic             varchar(20),
+   number               int not null,
+   type                 varchar(20) not null,
    primary key (com_ID, name)
 );
 
@@ -77,6 +79,7 @@ alter table apply add constraint FK_Reference_1 foreign key (app_ID)
 
 alter table apply add constraint FK_Reference_5 foreign key (com_ID, name)
       references positions (com_ID, name) on delete restrict on update restrict;
+
 
 /*==============================================================*/
 /* Table: comments                                              */

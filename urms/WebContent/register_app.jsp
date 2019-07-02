@@ -10,36 +10,11 @@
 <meta charset="UTF-8">
 <title>注册-统一招聘管理系统</title>
 <%session.removeAttribute("logwarn");%>
-<style>
-            /*web background*/
-            .container{
-                display:table;
-                height:100%;
-            }
-
-            .row{
-                display: table-cell;
-                vertical-align: middle;
-            }
-            /* centered columns styles */
-            .row-centered {
-                text-align:center;
-            }
-            .col-centered {
-                display:inline-block;
-                float:none;
-                text-align:left;
-                margin-right:-4px;
-            }
-        </style>
 </head>
 <body>
 <% response.setContentType("text/html;charset=utf-8"); 
 request.setCharacterEncoding("utf-8"); %>
-<div class="container">
-<div class="row row-centered">
-<div class="well col-md-6 col-centered">
-<div class='card mb-4 shadow'>
+<div class='card mb-4 shadow col-md-4 offset-4'>
 <div class='card-header'>
 <h2 class="text-primary text-center"><a href="main">统一招聘管理系统</a>|注册</h2>
 </div>
@@ -94,7 +69,5 @@ request.setCharacterEncoding("utf-8"); %>
 </form>
 </div>
 </div>
-</div>
-</div>
-</div>
+
 </body>
