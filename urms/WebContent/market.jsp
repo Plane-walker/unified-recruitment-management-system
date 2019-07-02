@@ -112,7 +112,7 @@ $(function(){
                     <li><a href="#"><i class="fa fa-fw fa-bug"></i> IT</a></li>
 				<li><a href="#"><i class="fa fa-fw fa-bank"></i> 金融</a></li>
 				<li><a href="#"><i class="fa fa-fw fa-gavel"></i> 建筑</a></li>
-				<li><a href="#"><i class="fa fa-fw fa-cutlery"></i> 餐饮</a></li>
+				<li><a href="#"><i class="fa fa-fw fa-cutlery"></i> 服务</a></li>
 				<li><a href="#"><i class="fa fa-fw fa-circle-o"></i> 其他</a></li>
                 </ul>
             </li>
