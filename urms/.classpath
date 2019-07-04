@@ -25,5 +25,7 @@
 	<classpathentry kind="lib" path="lib/c3p0-0.9.2.1.jar"/>
 	<classpathentry kind="lib" path="lib/mchange-commons-java-0.2.3.4.jar"/>
 	<classpathentry kind="lib" path="lib/urlrewritefilter-4.0.3.jar"/>
+	<classpathentry kind="lib" path="lib/commons-fileupload-1.4.jar"/>
+	<classpathentry kind="lib" path="lib/commons-io-2.6.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

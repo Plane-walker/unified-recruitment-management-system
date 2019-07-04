@@ -11,6 +11,7 @@ import javax.servlet.http.HttpSession;
 import util.JDBCutil_c3p0;
 
 public class Position {
+	String com_ID;
 	String com_name;
 	String name;
 	String information;
@@ -19,6 +20,9 @@ public class Position {
 	String academic;
 	int number;
 	String type;
+	public String getcom_ID() {
+		return com_ID;
+	}
 	public String getcom_name() {
 		return com_name;
 	}
@@ -42,6 +46,9 @@ public class Position {
 	}
 	public String gettype() {
 		return type;
+	}
+	public void setcom_ID(String com_ID) {
+		this.com_ID=com_ID;
 	}
 	public void setcom_name(String com_name) {
 		this.com_name=com_name;
@@ -67,6 +74,25 @@ public class Position {
 	public void settype(String type) {
 		this.type=type;
 	}
+	public int gettotalpage() {
+		int pagen=1;
+		Connection conn=null;
+		ResultSet rs=null;
+		PreparedStatement psta=null;
+		try {
+			conn=JDBCutil_c3p0.getconn();
+			psta=conn.prepareStatement("select sum(*) as pnumber from positions");
+			rs=psta.executeQuery();
+			if(rs.next()) {
+				pagen=rs.getInt("pnumber");
+			}
+		}catch (SQLException e) {
+			e.printStackTrace();
+	}
+			JDBCutil_c3p0.release(rs, psta, conn);
+		return pagen;
+		
+	}
 	public void gettop(int size) {
 		Connection conn=null;
 		ResultSet rs=null;
@@ -78,6 +104,7 @@ public class Position {
 			psta.setInt(1, size-1);
 			rs=psta.executeQuery();
 			if(rs.next()) {
+				this.com_ID=rs.getString("com_ID");
 				this.com_name=rs.getString("com_name");
 				this.name=rs.getString("name");
 				this.information=rs.getString("information");
@@ -161,6 +188,7 @@ public class Position {
 			rs.beforeFirst(); 
 			for(int i=0;rs.next();i++) {
 				out[i]=new Position();
+				out[i].setcom_ID(rs.getString("com_ID"));
 				out[i].setcom_name(rs.getString("com_name"));
 				out[i].setname(rs.getString("name"));
 				out[i].setinformation(rs.getString("information"));

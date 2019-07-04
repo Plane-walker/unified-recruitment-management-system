@@ -6,7 +6,7 @@
 
 <link href="bootstrap-4.3.1-dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet">
-<link href="style.css?v=1.4" rel="stylesheet">
+<link href="style.css?v=1.5" rel="stylesheet">
 <script type="text/javascript" src="jquery-3.4.1.min.js" ></script>
 <script type="text/javascript" src="bootstrap-4.3.1-dist/js/bootstrap.min.js" ></script>
 
@@ -24,32 +24,55 @@ var last=false;
 function psw(){
 	var html="";
 	if(!((last&&page==1)||com_ID!=""||com_name!=""||pos_name!="")){
-	if(page>1)
+	if(page>1){
+		html+="<button class='control-label col-md-2 btn btn-info' onclick='switchh()'>首页</button>";
 		html+="<button class='control-label col-md-2 btn btn-info' onclick='switchp()'>上一页</button>";
-	html+="<label class='control-label col-md-1'>第</label>";
-    html+="<input type='text' class='form-control col-md-1' id='paget' name='paget' value='${paget}' autocomplete='off'>";
+	}
+	if(page>2)
+	html+="<a href='javascript:void(0);' onclick='return switchpp()' class='text-primary col-md-1 text-center' id='firstp'>1</a>";
+	if(page>1)
+	html+="<a href='javascript:void(0);' onclick='return switchp()' class='text-primary col-md-1 text-center' id='secondp'>2</a>";
+	html+="<a class='col-md-1' id='thirdp'>1</a>";
     html+="<button class='control-label col-md-2 btn btn-info' onclick='switchl()'>下一页</button>";
-    html+="<button class='control-label col-md-2 btn btn-info' onclick='jump()'>跳页</button>";
     $("#pageswitch").html(html);
-    $("#paget").val(page);
+    $("#thirdp").html(page);
+    if(page>1)
+    $("#secondp").html(page-1);
+    if(page>2)
+    $("#firstp").html(page-2);
     }
+}
+function switchh(){
+	page=1;
+	refresh();
+	psw();
+	$('html , body').animate({scrollTop: 0},0);
 }
 function switchl(){
 	if(!last){
 	page++;
 	refresh();
 	psw();
+	$('html , body').animate({scrollTop: 0},0);
 	}
 }
 function switchp(){
 	page--;
 	refresh();
 	psw();
+	$('html , body').animate({scrollTop: 0},0);
+}
+function switchpp(){
+	page-=2;
+	refresh();
+	psw();
+	$('html , body').animate({scrollTop: 0},0);
 }
 function jump(){
 	page=$("#paget").val();
 	refresh();
 	psw();
+	$('html , body').animate({scrollTop: 0},0);
 }
 function refresh(){
 	  var url = "Refreshserv";
@@ -67,21 +90,23 @@ function refresh(){
 		   else
 			   last=false;
 		   if(dates.length==0)
-			   html+="<p class='text-warn'>无招聘信息</p>";
+			   html+="<p class='text-warning'>无招聘信息</p>";
 			   else{
 		   for(var i=0;i<dates.length;i++){
 			   if(i%3==0)
 			   html+="<div class='card-deck mb-3 text-center'>";
-		   html+="<div class='card mb-4 shadow'><div class='card-header'>";
+		   html+="<div class='card mb-4 shadow text-center'><div class='card-header'>";
 		   html+="<h4 class='my-0 font-weight-normal'>"+dates[i].com_name+"</div>";
 		   html+="<div class='card-body'>";
-		   html+="<h4 class='card-title'>"+dates[i].name+"</h4>";
+		   html+="<h4 class='card-title positionname'>"+dates[i].name+"</h4>";
 		   html+="<p class='card-title'>月薪："+dates[i].salary+"</p>";
 		   html+="<p class='card-title'>工作地点："+dates[i].city+"</p>";
 		   html+="<p class='card-title'>学历要求："+dates[i].academic+"</p>";
-		   html+="<p class='card-title'>需求人数："+dates[i].number+"</p>";
+		   html+="<p class='card-title'>需求人数：<label class='neednumber'>"+dates[i].number+"</label></p>";
 		   html+="<p class='card-title'>类型："+dates[i].type+"</p>";
-		   html+="<button class='btn btn-primary'>处理</button>";
+		   html+="<p class='card-title d-none'>详情："+dates[i].information+"</p>";
+		   html+="<div class='d-none appinfo'></div>";
+		   html+="<button class='btn btn-primary details'>处理</button>";
 		   html+="</div></div>";
 			   if(i%3==2)
 			   html+="</div>";
@@ -96,6 +121,7 @@ function refresh(){
 		   }
 			   }
 		   $("#poscard").html(html);
+		   psw();
 	   },
 	   error:function() {
 	       }
@@ -147,6 +173,7 @@ function refresh(){
             "<div class='col-md-8' id='publishwarn'></div>"+
         "</div>";
 		  $("#poscard").html(html);
+		  $("#pageswitch").html("");
 	  }
 function exit(){
 	var url = "Exitserv";
@@ -195,8 +222,9 @@ $(function(){
             success:function(dates){
             	var html="";
  			   if(dates.info==""){
- 				   html+="<p class='text-warn'>发布成功</p>";
+ 				   html+="<p class='text-info'>发布成功</p>";
  				  $("#poscard").html(html);
+ 				 $('html , body').animate({scrollTop: 0},0);
  			   }
  				   else
  					  $("#publishwarn").html("<font color='red'>"+dates.info+"</font>");
@@ -205,6 +233,11 @@ $(function(){
  		       } 
         });    
     }
+  function download(){
+	  
+	  var url = $("#downloadpath").html();
+	  windows.open(url)   
+ }
 </script>
 <div class="wrapper">
     <!-- Sidebar -->
@@ -222,9 +255,12 @@ $(function(){
             <li>
                 <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-fw fa-gears"></i> 招聘管理 </a>
                 <ul class="collapse list-unstyled" id="pageSubmenu">
-                    <li><a href="#" onclick="return refresh()"><i class="fa fa-fw fa-bug"></i> 申请审核</a></li>
-				<li><a href="#" onclick="return createpos()"><i class="fa fa-fw fa-bank"></i> 发布职位</a></li>
+                    <li><a href="#" onclick="return refresh()"><i class="fa fa-fw fa-folder-open"></i> 申请审核</a></li>
+				<li><a href="#" onclick="return createpos()"><i class="fa fa-fw fa-upload"></i> 发布职位</a></li>
                 </ul>
+            </li>
+            <li>
+                <a href="#"><i class="fa fa-fw fa-wrench"></i> 员工管理</a>
             </li>
             <li>
                 <a href="#"><i class="fa fa-fw fa-bell"></i> 消息</a>
@@ -257,6 +293,111 @@ $(document).ready(function () {
         $('#poscard').toggleClass('fixborder');
         $('#pageswitch').toggleClass('fixborder');
     });
+});
+$("#poscard").on('click','.details',function () {
+	var aimcard=$(this).parent().parent();
+	aimcard.addClass("offset-4");
+	aimcard.addClass("col-md-4");
+	aimcard.children().children(".d-none").removeClass("d-none");
+	$("#poscard").html(aimcard);
+	$(this).html("返回");
+	$(this).removeClass("details");
+	$(this).attr("onclick","refresh()");
+	$("#pageswitch").html("");
+	$('html , body').animate({scrollTop: 0},0);
+	var url = "Applyinfoserv";
+	  var data = {"pos_name":aimcard.children().children(".positionname").html()};
+	  $.ajax({
+	   type :"post",
+	   dataType: "json",
+	   url : url,
+	   data : data,
+	   timeout:1000,
+	   success:function(dates){
+		   var html="";
+		   for(var i=0;i<dates.length;i++){
+			   html+="<div class='card mb-4 shadow text-center'>";
+			   html+="<div class='card-body'>";
+			   html+="<h4 class='card-title applicantid'>"+dates[i].ID+"</h4>";
+			   html+="<p class='card-title'>昵称："+dates[i].name+"</p>";
+			   html+="<p class='card-title'>性别："+dates[i].gender+"</p>";
+			   html+="<p class='card-title'>国籍："+dates[i].country+"</p>";
+			   html+="<p class='card-title'>联系电话："+dates[i].phone+"</p>";
+			   html+="<p class='card-title'>邮箱："+dates[i].email+"</p>";
+			   if(dates[i].filepath!=""){
+				   html+="<form action='Downloadserv' method='post'>";
+				   html+="<input type='text' class='d-none' name='filepath' value='"+dates[i].filepath+"'>";
+			   html+="<input class='btn btn-link' type='submit' value='下载材料'></form><br>";
+			   }
+			   else
+				   html+="<p class='card-title'>未提供材料</p>";
+				   if(dates[i].information==""){
+			   html+="<button class='btn btn-info meeting'>安排面试</button><div class='d-none meetingarr'><br>"+
+	    		"<textarea class='meetinginfo'  value=''></textarea><br><button class='btn btn-primary sendmeeting'>发送</button></div><br><br>";
+				   }
+				   else{
+					   html+="<button class='btn btn-info disabled'>已安排面试</button><br><p class='card-title'>详细信息："+dates[i].information+"</p><br><br>";
+				   }
+			   html+="<button class='btn btn-warning finaldec col-md-3'>拒绝</button>";
+			   html+="<button class='btn btn-warning finaldec col-md-3 offset-6'>接受</button>";
+			   html+="</div></div>";
+			   
+		   }
+		   aimcard.children().children(".appinfo").html(html);
+		   $("#poscard").on('click','.finaldec',function () {
+			   var thiscard=$(this).parent().parent();
+			   var app_ID=$(this).parent().children(".applicantid").html();
+			   var dec=$(this).html();
+			   var url = "Statusserv";
+				  var statusdata = {"pos_name":data.pos_name,"new_status":dec,"app_ID":app_ID};
+				  $.ajax({
+				   type :"post",
+				   dataType: "json",
+				   url : url,
+				   data : statusdata,
+				   timeout:1000,
+				   success:function(dates){
+					   thiscard.html("");
+					   thiscard.addClass("d-none");
+					   if(statusdata.new_status=="接受"){
+						   var num=Number(aimcard.parent().find(".neednumber").html());
+						   if(num>1)
+							   aimcard.parent().find(".neednumber").html(num-1);
+						   else
+							   refresh();
+					   }
+				   },
+				   error:function() {
+				       }
+			  });
+		   });
+		   $("#poscard").on('click','.meeting',function () {
+			   $(".meetingarr").toggleClass("d-none");
+		   });
+		   $("#poscard").on('click','.sendmeeting',function () {
+			   var url = "Statusserv";
+				  var statusdata = {"pos_name":$(".positionname").html(),"new_status":"meeting","app_ID":$(".applicantid").html(),information:$(".meetinginfo").val()};
+				  $.ajax({
+				   type :"post",
+				   dataType: "json",
+				   url : url,
+				   data : statusdata,
+				   timeout:1000,
+				   success:function(dates){
+					   $(".meeting").html("已安排面试");
+					   var html="<br><p class='card-title'>详细信息："+$(".meetinginfo").val()+"</p>";
+					   $(".meetingarr").html(html);
+					   $(".meeting").addClass("disabled");
+					   $(".meeting").removeClass("meeting");
+				   },
+				   error:function() {
+				       }
+			  });
+		   });
+	   },
+	   error:function() {
+	       }
+	  });
 });
 </script>
 </body>

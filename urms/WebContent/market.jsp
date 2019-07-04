@@ -6,9 +6,12 @@
 
 <link href="bootstrap-4.3.1-dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet">
-<link href="style.css?v=1.6" rel="stylesheet">
+<link href="bootstrap-fileinput/css/fileinput.min.css" rel="stylesheet">
+<link href="style.css?v=1.1" rel="stylesheet">
 <script type="text/javascript" src="jquery-3.4.1.min.js" ></script>
 <script type="text/javascript" src="bootstrap-4.3.1-dist/js/bootstrap.min.js" ></script>
+<script type="text/javascript" src="bootstrap-fileinput/js/fileinput.min.js" ></script>
+<script type="text/javascript" src="bootstrap-fileinput/js/locales/zh.js" ></script>
 
 <meta charset="UTF-8">
 <title>招聘中心-统一招聘管理系统</title>
@@ -21,35 +24,59 @@ var com_name="";
 var pos_name="";
 var page=1;
 var last=false;
+var usefile=false;
 function psw(){
 	var html="";
 	if(!((last&&page==1)||com_ID!=""||com_name!=""||pos_name!="")){
-	if(page>1)
+	if(page>1){
+		html+="<button class='control-label col-md-2 btn btn-info' onclick='switchh()'>首页</button>";
 		html+="<button class='control-label col-md-2 btn btn-info' onclick='switchp()'>上一页</button>";
-	html+="<label class='control-label col-md-1'>第</label>";
-    html+="<input type='text' class='form-control col-md-1' id='paget' name='paget' value='${paget}' autocomplete='off'>";
+	}
+	if(page>2)
+	html+="<a href='javascript:void(0);' onclick='return switchpp()' class='text-primary col-md-1' id='firstp'>1</a>";
+	if(page>1)
+	html+="<a href='javascript:void(0);' onclick='return switchp()' class='text-primary col-md-1' id='secondp'>2</a>";
+	html+="<a class='col-md-1' id='thirdp'>1</a>";
     html+="<button class='control-label col-md-2 btn btn-info' onclick='switchl()'>下一页</button>";
-    html+="<button class='control-label col-md-2 btn btn-info' onclick='jump()'>跳页</button>";
     $("#pageswitch").html(html);
-    $("#paget").val(page);
+    $("#thirdp").html(page);
+    if(page>1)
+    $("#secondp").html(page-1);
+    if(page>2)
+    $("#firstp").html(page-2);
     }
+}
+function switchh(){
+	page=1;
+	refresh();
+	psw();
+	$('html , body').animate({scrollTop: 0},0);
 }
 function switchl(){
 	if(!last){
 	page++;
 	refresh();
 	psw();
+	$('html , body').animate({scrollTop: 0},0);
 	}
 }
 function switchp(){
 	page--;
 	refresh();
 	psw();
+	$('html , body').animate({scrollTop: 0},0);
+}
+function switchpp(){
+	page-=2;
+	refresh();
+	psw();
+	$('html , body').animate({scrollTop: 0},0);
 }
 function jump(){
 	page=$("#paget").val();
 	refresh();
 	psw();
+	$('html , body').animate({scrollTop: 0},0);
 }
 function refresh(){
 	  var url = "Refreshserv";
@@ -67,23 +94,25 @@ function refresh(){
 		   else
 			   last=false;
 		   if(dates.length==0)
-			   html+="<p class='text-warn'>找不到招聘信息</p>";
+			   html+="<p class='text-warning'>无招聘信息</p>";
 			   else{
 		   for(var i=0;i<dates.length;i++){
 			   if(i%3==0)
 			   html+="<div class='card-deck mb-3 text-center'>";
-		   html+="<div class='card mb-4 shadow'><div class='card-header'>";
+		   html+="<div class='card mb-4 shadow text-center'><div class='card-header'>";
 		   html+="<h4 class='my-0 font-weight-normal'>"+dates[i].com_name+"</div>";
 		   html+="<div class='card-body'>";
-		   html+="<h4 class='card-title'>"+dates[i].name+"</h4>";
+		   html+="<h4 class='card-title companyid' style='display:none'>"+dates[i].com_ID+"</h4>";
+		   html+="<h4 class='card-title positionname'>"+dates[i].name+"</h4>";
 		   html+="<p class='card-title'>月薪："+dates[i].salary+"</p>";
 		   html+="<p class='card-title'>工作地点："+dates[i].city+"</p>";
 		   html+="<p class='card-title'>学历要求："+dates[i].academic+"</p>";
 		   html+="<p class='card-title'>需求人数："+dates[i].number+"</p>";
 		   html+="<p class='card-title'>类型："+dates[i].type+"</p>";
 		   html+="<p class='card-title d-none'>详情："+dates[i].information+"</p>";
-		   html+="<button class='btn btn-info details'>详情</button>";
-		   html+="<button class='btn btn-primary'>应聘</button>";
+		   html+="<input type='file' multiple class='file-loading d-none' id='filepath' onchange='changeInput()'><br class='d-none'>";
+		   html+="<button class='btn btn-info details col-md-3'>详情</button>";
+		   html+="<button class='btn btn-warning offset-6 col-md-3 d-none sendrequest' onclick='openinput()'>应聘</button>";
 		   html+="</div></div>";
 			   if(i%3==2)
 			   html+="</div>";
@@ -99,6 +128,7 @@ function refresh(){
 			   }
 		   $("#poscard").html(html);
 		   psw();
+		   usefile=false;
 	   },
 	   error:function() {
 	       }
@@ -140,10 +170,10 @@ $(function(){
             <li>
                 <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-fw fa-plus"></i> 招聘市场 </a>
                 <ul class="collapse list-unstyled" id="pageSubmenu">
-                <li><a href="#" onclick="return refresh()"><i class="fa fa-fw fa-bug"></i> 综合</a></li>
+                <li><a href="#" onclick="return refresh()"><i class="fa fa-fw fa-globe"></i> 综合</a></li>
                     <li><a href="#"><i class="fa fa-fw fa-bug"></i> IT</a></li>
-				<li><a href="#"><i class="fa fa-fw fa-bank"></i> 金融</a></li>
-				<li><a href="#"><i class="fa fa-fw fa-gavel"></i> 建筑</a></li>
+				<li><a href="#"><i class="fa fa-fw fa-balance-scale"></i> 金融</a></li>
+				<li><a href="#"><i class="fa fa-fw fa-building"></i> 建筑</a></li>
 				<li><a href="#"><i class="fa fa-fw fa-cutlery"></i> 服务</a></li>
 				<li><a href="#"><i class="fa fa-fw fa-circle-o"></i> 其他</a></li>
                 </ul>
@@ -188,9 +218,71 @@ $(document).ready(function () {
     	$(this).html("返回");
     	$(this).removeClass("details");
     	$(this).attr("onclick","refresh()");
+    	$("#pageswitch").html("");
     	$('html , body').animate({scrollTop: 0},0);
-    	
+    	$("#filepath").fileinput({
+            language: 'zh', 
+            uploadUrl: 'Uploadserv', 
+            showUpload: false,
+            showCaption: false,
+            enctype: 'multipart/form-data',
+            browseClass: "btn btn-primary chobutton",           
+            previewFileIcon: "<i class='glyphicon glyphicon-king'></i>",
+            dropZoneTitle: "上传相关材料<br>多个文件请打包",
+            maxFileCount: 1,
+            uploadExtraData: function () {
+            	var aimcard=$(this).parent().parent();
+                var data = {"com_ID":aimcard.children().children(".companyid").html(),"pos_name":aimcard.children().children(".positionname").html()};
+                return data;
+            },
+        })
+        .on("filebatchselected", function(event, files) {
+		usefile=true;
+    	})
+    	.on("filecleared",function(event, data, msg){
+		usefile=false;
+    	});
     });
+    $("#poscard").on('click','.sendrequest',function () {
+    	var aimcard=$(this).parent().parent();
+    	var url = "Applyserv";
+    	var data = {"com_ID":aimcard.children().children(".companyid").html(),"pos_name":aimcard.children().children(".positionname").html(),"filepath":""};
+    	 $.ajax({
+    		   type :"post",
+    		   dataType: "json",
+    		   url : url,
+    		   data : data,
+    		   timeout:1000,
+    		   success:function(dates){
+    			   if(dates.info==""){
+    				   if(usefile){
+    				   $("#filepath").fileinput("upload");
+    				   $("#filepath").on('fileuploaded', function (event, data,previewId, index) {
+    					   var html="";
+	    				   html+="<p class='text-info'>申请成功，等待审核</p>";
+	    				  $("#poscard").html(html);
+	    				  $('html , body').animate({scrollTop: 0},0);
+    				    });
+    				   }
+    				   else{
+    					   var html="";
+	    				   html+="<p class='text-info'>申请成功，等待审核</p>";
+	    				  $("#poscard").html(html);
+	    				  $('html , body').animate({scrollTop: 0},0);
+    				   }
+    			   }
+    			   else{
+    				   var html="";
+				   html+="<p class='text-warning'>"+dates.info+"</p>";
+				  $("#poscard").html(html);
+				  $('html , body').animate({scrollTop: 0},0);
+    			   }
+    		   },
+    		   error:function() {
+    		       }
+    		  });
+    });
+    
 });
 </script>
 </body>
