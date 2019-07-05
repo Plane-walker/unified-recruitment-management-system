@@ -19,11 +19,12 @@
 var com_ID="<%out.print((String)session.getAttribute("ID"));%>";
 var com_name="";
 var pos_name="";
+var  type="";
 var page=1;
 var last=false;
 function psw(){
 	var html="";
-	if(!((last&&page==1)||com_ID!=""||com_name!=""||pos_name!="")){
+	if(!(last&&page==1)){
 	if(page>1){
 		html+="<button class='control-label col-md-2 btn btn-info' onclick='switchh()'>首页</button>";
 		html+="<button class='control-label col-md-2 btn btn-info' onclick='switchp()'>上一页</button>";
@@ -41,6 +42,8 @@ function psw(){
     if(page>2)
     $("#firstp").html(page-2);
     }
+	else
+		$("#pageswitch").html("");
 }
 function switchh(){
 	page=1;
@@ -76,7 +79,7 @@ function jump(){
 }
 function refresh(){
 	  var url = "Refreshserv";
-	  var data = {"com_ID":com_ID,"com_name":com_name,"pos_name":pos_name,"size":"9","page":page};
+	  var data = {"com_ID":com_ID,"com_name":com_name,"pos_name":pos_name,"size":"9","page":page,"type":type};
 	  $.ajax({
 	   type :"post",
 	   dataType: "json",
@@ -127,6 +130,15 @@ function refresh(){
 	       }
 	  });
 	  };
+	  function search(){
+		  com_name="";
+		  pos_name="";
+		  if($("#searchtype").val()=="com")
+			  com_name=$("#searchcon").val();
+		  else
+			  pos_name=$("#searchcon").val();
+		  refresh();
+	  }
 	  function createpos(){
 		  var html="";
 		  html+="<div class='card mb-4 shadow col-md-4 offset-4'>"+
@@ -279,7 +291,14 @@ $(function(){
                 <i class="fa fa-fw fa-bars"></i>
                 <span></span>
             </button>
-
+			<div class="form-group form-inline">
+            <select class="form-control" id="searchtype" >
+            <option value="pos">岗位名</option>
+            <option value="com">公司名</option>
+            </select>
+				<input class="form-control" type="text" ID="searchcon" value="" autocomplete="off" placeholder="">
+				<button class="btn btn-info"  onclick="return search()"><i class='fa fa-fw fa-search'></i></button>
+			</div>
         </div>
     </nav>
     <div id="poscard" class="fixborder movement"></div>

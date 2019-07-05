@@ -22,12 +22,13 @@
 var com_ID="";
 var com_name="";
 var pos_name="";
+var type="";
 var page=1;
 var last=false;
 var usefile=false;
 function psw(){
 	var html="";
-	if(!((last&&page==1)||com_ID!=""||com_name!=""||pos_name!="")){
+	if(!(last&&page==1)){
 	if(page>1){
 		html+="<button class='control-label col-md-2 btn btn-info' onclick='switchh()'>首页</button>";
 		html+="<button class='control-label col-md-2 btn btn-info' onclick='switchp()'>上一页</button>";
@@ -45,6 +46,8 @@ function psw(){
     if(page>2)
     $("#firstp").html(page-2);
     }
+	else
+		$("#pageswitch").html("");
 }
 function switchh(){
 	page=1;
@@ -80,7 +83,7 @@ function jump(){
 }
 function refresh(){
 	  var url = "Refreshserv";
-	  var data = {"com_ID":com_ID,"com_name":com_name,"pos_name":pos_name,"size":"9","page":page};
+	  var data = {"com_ID":com_ID,"com_name":com_name,"pos_name":pos_name,"size":"9","page":page,"type":type};
 	  $.ajax({
 	   type :"post",
 	   dataType: "json",
@@ -134,6 +137,23 @@ function refresh(){
 	       }
 	  });
 	  };
+	  function allrefresh(){
+		  type="";
+		  refresh();
+	  }
+	  function typerefresh(typelabel){
+		  type=$(typelabel).children("label").html();
+		  refresh();
+	  }
+	  function search(){
+		  com_name="";
+		  pos_name="";
+		  if($("#searchtype").val()=="com")
+			  com_name=$("#searchcon").val();
+		  else
+			  pos_name=$("#searchcon").val();
+		  refresh();
+	  }
 function exit(){
 	var url = "Exitserv";
 	var data = {};
@@ -170,12 +190,12 @@ $(function(){
             <li>
                 <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-fw fa-plus"></i> 招聘市场 </a>
                 <ul class="collapse list-unstyled" id="pageSubmenu">
-                <li><a href="#" onclick="return refresh()"><i class="fa fa-fw fa-globe"></i> 综合</a></li>
-                    <li><a href="#"><i class="fa fa-fw fa-bug"></i> IT</a></li>
-				<li><a href="#"><i class="fa fa-fw fa-balance-scale"></i> 金融</a></li>
-				<li><a href="#"><i class="fa fa-fw fa-building"></i> 建筑</a></li>
-				<li><a href="#"><i class="fa fa-fw fa-cutlery"></i> 服务</a></li>
-				<li><a href="#"><i class="fa fa-fw fa-circle-o"></i> 其他</a></li>
+                <li><a href="#" onclick="return allrefresh()"><i class="fa fa-fw fa-globe"></i> 综合</a></li>
+                    <li><a href="#" onclick="return typerefresh(this)"><i class="fa fa-fw fa-bug"></i> <label>IT</label></a></li>
+				<li><a href="#" onclick="return typerefresh(this)"><i class="fa fa-fw fa-balance-scale"></i> <label>金融</label></a></li>
+				<li><a href="#" onclick="return typerefresh(this)"><i class="fa fa-fw fa-building"></i> <label>建筑</label></a></li>
+				<li><a href="#" onclick="return typerefresh(this)"><i class="fa fa-fw fa-cutlery"></i> <label>服务</label></a></li>
+				<li><a href="#" onclick="return typerefresh(this)"><i class="fa fa-fw fa-circle-o"></i> <label>其他</label></a></li>
                 </ul>
             </li>
             <li>
@@ -195,7 +215,14 @@ $(function(){
                 <i class="fa fa-fw fa-bars"></i>
                 <span></span>
             </button>
-
+			<div class="form-group form-inline">
+            <select class="form-control" id="searchtype" >
+            <option value="pos">岗位名</option>
+            <option value="com">公司名</option>
+            </select>
+				<input class="form-control" type="text" ID="searchcon" value="" autocomplete="off" placeholder="">
+				<button class="btn btn-info"  onclick="return search()"><i class='fa fa-fw fa-search'></i></button>
+			</div>
         </div>
     </nav>
     <div id="poscard" class="fixborder movement"></div>

@@ -1,5 +1,6 @@
 package apply;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -24,6 +25,18 @@ public class Apply {
 		try {
 			if(!request.getParameter("new_status").equals("meeting")) {
 			conn=JDBCutil_c3p0.getconn();
+			psta=conn.prepareStatement("select material from apply"
+					+ " where app_ID=? and com_ID=? and name=?");
+			psta.setString(1, request.getParameter("app_ID"));
+			psta.setString(2, (String)session.getAttribute("ID"));
+			psta.setString(3, request.getParameter("pos_name"));
+			rs=psta.executeQuery();
+			if(rs.next()) {
+				String filepath=rs.getString("material");
+				File file = new File(filepath);  
+		        if (file.exists() && file.isFile())
+		        	file.delete();
+			}
 			psta=conn.prepareStatement("delete from apply"
 					+ " where app_ID=? and com_ID=? and name=?");
 			psta.setString(1, request.getParameter("app_ID"));

@@ -67,7 +67,8 @@ public class Uploadserv extends HttpServlet {
 	                    if(!item.isFormField()){
 	                        String fileName = new File(item.getName()).getName();
 	                        Random rand=new Random();
-	                        filePath = uploadPath+"\\"+rand.nextInt(1000)+"_"+fileName;
+	                        Applicant app=new Applicant();
+	                        filePath = uploadPath+"\\"+app.getmd5(""+System.currentTimeMillis())+"_"+fileName;
 	                        File storeFile = new File(filePath);
 	                        item.write(storeFile);
 	                    }

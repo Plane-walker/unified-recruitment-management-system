@@ -93,27 +93,20 @@ public class Position {
 		return pagen;
 		
 	}
-	public void gettop(int size) {
+	public void gettop(HttpServletRequest request,int size) {
 		Connection conn=null;
 		ResultSet rs=null;
 		PreparedStatement psta=null;
 		try {
 			conn=JDBCutil_c3p0.getconn();
 			psta=conn.prepareStatement("select * from positions"
+					+ " where LOCATE(?, name)>0 and LOCATE(?, com_name)>0"
 					+ " order by hits desc limit ?, 1 ");
-			psta.setInt(1, size-1);
+			psta.setString(1, (String)request.getParameter("pos_name"));
+			psta.setString(2, (String)request.getParameter("com_name"));
+			psta.setInt(3, size-1);
 			rs=psta.executeQuery();
-			if(rs.next()) {
-				this.com_ID=rs.getString("com_ID");
-				this.com_name=rs.getString("com_name");
-				this.name=rs.getString("name");
-				this.information=rs.getString("information");
-				this.city=rs.getString("city");
-				this.academic=rs.getString("academic");
-				this.salary=Double.valueOf(rs.getString("salary"));
-				this.number=Integer.valueOf(rs.getString("number"));
-				this.type=rs.getString("type");
-			}
+			dealinfo(rs);
 			JDBCutil_c3p0.release(rs, psta, conn);
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -162,47 +155,63 @@ public class Position {
 		return info;
 		
 	}
-	public Position[] getspec(HttpServletRequest request) {
+	public void getbyID(HttpServletRequest request,int size) {
 		Connection conn=null;
 		ResultSet rs=null;
 		PreparedStatement psta=null;
-		Position[] out=null;
 		try {
 			conn=JDBCutil_c3p0.getconn();
-			if(((String)request.getParameter("com_ID")).length()!=0) {
 			psta=conn.prepareStatement("select * from positions"
-					+ " where com_ID=? and LOCATE(?, name)>0 and LOCATE(?, com_name)>0",ResultSet.TYPE_SCROLL_INSENSITIVE);
+					+ " where com_ID=? and LOCATE(?, name)>0 and LOCATE(?, com_name)>0"
+					+ " order by hits desc limit ?, 1");
 			psta.setString(1, (String)request.getParameter("com_ID"));
 			psta.setString(2, (String)request.getParameter("pos_name"));
 			psta.setString(3, (String)request.getParameter("com_name"));
-			}
-			else {
-				psta=conn.prepareStatement("select * from positions"
-						+ " where LOCATE(?, name)>0 and LOCATE(?, com_name)>0",ResultSet.TYPE_SCROLL_INSENSITIVE);
-				psta.setString(1, (String)request.getParameter("pos_name"));
-				psta.setString(2, (String)request.getParameter("com_name"));
-			}
+			psta.setInt(4, size-1);
 			rs=psta.executeQuery();
-			rs.last(); 
-			out=new Position[rs.getRow()];
-			rs.beforeFirst(); 
-			for(int i=0;rs.next();i++) {
-				out[i]=new Position();
-				out[i].setcom_ID(rs.getString("com_ID"));
-				out[i].setcom_name(rs.getString("com_name"));
-				out[i].setname(rs.getString("name"));
-				out[i].setinformation(rs.getString("information"));
-				out[i].setcity(rs.getString("city"));
-				out[i].setacademic(rs.getString("academic"));
-				out[i].setsalary(Double.valueOf(rs.getString("salary")));
-				out[i].setnumber(Integer.valueOf(rs.getString("number")));
-				out[i].settype(rs.getString("type"));
-			}
+			dealinfo(rs);
 			JDBCutil_c3p0.release(rs, psta, conn);
 		} catch (SQLException e) {
 			e.printStackTrace();
 	}
-		return out;
-		
+	}
+	public void getbytype(HttpServletRequest request,int size) {
+		Connection conn=null;
+		ResultSet rs=null;
+		PreparedStatement psta=null;
+		try {
+			conn=JDBCutil_c3p0.getconn();
+			psta=conn.prepareStatement("select * from positions"
+					+ " where type=? and LOCATE(?, name)>0 and LOCATE(?, com_name)>0"
+					+ " order by hits desc limit ?, 1");
+			psta.setString(1, (String)request.getParameter("type"));
+			psta.setString(2, (String)request.getParameter("pos_name"));
+			psta.setString(3, (String)request.getParameter("com_name"));
+			psta.setInt(4, size-1);
+			rs=psta.executeQuery();
+			dealinfo(rs);
+			JDBCutil_c3p0.release(rs, psta, conn);
+		} catch (SQLException e) {
+			e.printStackTrace();
+	}
+	}
+	void dealinfo(ResultSet rs) {
+		try {
+			if(rs.next()) {
+				this.com_ID=rs.getString("com_ID");
+				this.com_name=rs.getString("com_name");
+				this.name=rs.getString("name");
+				this.information=rs.getString("information");
+				this.city=rs.getString("city");
+				this.academic=rs.getString("academic");
+				this.salary=Double.valueOf(rs.getString("salary"));
+				this.number=Integer.valueOf(rs.getString("number"));
+				this.type=rs.getString("type");
+			}
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 }

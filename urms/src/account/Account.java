@@ -40,7 +40,7 @@ abstract public class Account {
 	public String getavator() {
 		return avator;
 	}
-	String getmd5(String input) {
+	public String getmd5(String input) {
 		if(input==null)
 			input="";
 		String output="";

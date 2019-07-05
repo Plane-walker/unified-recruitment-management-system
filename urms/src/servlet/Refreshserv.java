@@ -42,10 +42,16 @@ public class Refreshserv extends HttpServlet {
 		int page=Integer.valueOf(request.getParameter("page"));
 		Position[] pos=new Position[size];
 		JSONArray jsona = new JSONArray();
-		if(request.getParameter("com_ID").length()==0&&request.getParameter("com_name").length()==0&&request.getParameter("pos_name").length()==0)
 		for(int i=0;i<size;i++) {
 			pos[i]=new Position();
-			pos[i].gettop((page-1)*size+i+1);
+			if(request.getParameter("com_ID").length()==0&&request.getParameter("type").length()==0) {
+				pos[i].gettop(request,(page-1)*size+i+1);
+			}
+			else if(request.getParameter("type").length()==0) {
+				pos[i].getbyID(request,(page-1)*size+i+1);
+			}
+			else
+				pos[i].getbytype(request,(page-1)*size+i+1);
 			if(pos[i].getname()!=null) {
 			JSONObject json=new JSONObject();
 			json.put("com_ID", pos[i].getcom_ID());
@@ -64,29 +70,6 @@ public class Refreshserv extends HttpServlet {
 			json.put("number", pos[i].getnumber());
 			json.put("type", pos[i].gettype());
 			jsona.put(json);
-			}
-		}
-		else {
-			pos[0]=new Position();
-			pos=pos[0].getspec(request);
-			for(int i=0;i<pos.length;i++) {
-				JSONObject json=new JSONObject();
-				json.put("com_ID", pos[i].getcom_ID());
-				json.put("com_name", pos[i].getcom_name());
-				json.put("name", pos[i].getname());
-				if(pos[i].getinformation()!=null&&pos[i].getinformation().length()!=0)
-				json.put("information", pos[i].getinformation());
-				else
-					json.put("information", "无");
-				json.put("city", pos[i].getcity());
-				if(pos[i].getacademic()!=null&&pos[i].getacademic().length()!=0)
-				json.put("academic", pos[i].getacademic());
-				else
-					json.put("academic", "无");
-				json.put("salary", pos[i].getsalary());
-				json.put("number", pos[i].getnumber());
-				json.put("type",pos[i].gettype());
-				jsona.put(json);
 			}
 		}
 		response.setCharacterEncoding("utf-8");
