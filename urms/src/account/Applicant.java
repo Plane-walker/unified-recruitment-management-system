@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import net.sf.json.JSONObject;
 import position.Position;
 import util.JDBCutil_c3p0;
 
@@ -15,6 +16,7 @@ public class Applicant extends Account {
 String gender;
 String phone;
 String email;
+String pos_name;
 String filepath;
 String information;
 public void setfilepath(String filepath) {
@@ -51,6 +53,9 @@ public String getphone() {
 }
 public String getemail() {
 	return email;
+}
+public String getpos_name() {
+	return pos_name;
 }
 	@Override
 	public
@@ -164,6 +169,13 @@ public String getemail() {
 			psta.setString(3, pos_name);
 			psta.setString(4, filepath);
 			psta.executeUpdate();
+			psta=conn.prepareStatement(
+					"update positions"
+					+ " set hits=hits+1"
+					+ " where com_ID=? and name=? ");
+			psta.setString(1, com_ID);
+			psta.setString(2, pos_name);
+			psta.executeUpdate();
 			}
 			else {
 				info="请勿重复申请！";
@@ -232,11 +244,173 @@ public String getemail() {
 				out[i].setemail(rs.getString("email"));
 				out[i].setfilepath(rs.getString("material"));
 				out[i].setinformation(rs.getString("information"));
+				out[i].setavator(rs.getString("avator"));
 			}
 			JDBCutil_c3p0.release(rs, psta, conn);
 		} catch (SQLException e) {
 			e.printStackTrace();
 	}
 		return out;
+	}
+	public void getemployee(HttpServletRequest request,int size) {
+		HttpSession session = request.getSession();
+		Connection conn=null;
+		ResultSet rs=null;
+		PreparedStatement psta=null;
+		try {
+			conn=JDBCutil_c3p0.getconn();
+			psta=conn.prepareStatement("select * from applicant"
+					+ " where com_ID=? and LOCATE(?, ID)>0"
+					+ " order by ID asc limit ?, 1");
+			psta.setString(1, (String)session.getAttribute("ID"));
+			psta.setString(2, (String)request.getParameter("ID"));
+			psta.setInt(3, size-1);
+			rs=psta.executeQuery();
+			dealinfo(rs);
+			JDBCutil_c3p0.release(rs, psta, conn);
+		} catch (SQLException e) {
+			e.printStackTrace();
+	}
+	}
+	void dealinfo(ResultSet rs) {
+		try {
+			if(rs.next()) {
+				this.ID=rs.getString("ID");
+				this.name=rs.getString("name");
+				this.country=rs.getString("country");
+				this.gender=rs.getString("gender");
+				this.phone=rs.getString("phone");
+				this.email=rs.getString("email");
+				this.pos_name=rs.getString("pos_name");
+				this.avator=rs.getString("avator");
+			}
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	public void disemploy(HttpServletRequest request) {
+		Connection conn=null;
+		ResultSet rs=null;
+		PreparedStatement psta=null;
+		try {
+			conn=JDBCutil_c3p0.getconn();
+			psta=conn.prepareStatement("update applicant"
+					+ " set pos_name=null , com_ID=null "
+					+ " where ID=?");
+			psta.setString(1, (String)request.getParameter("app_ID"));
+			psta.executeUpdate();
+			JDBCutil_c3p0.release(rs, psta, conn);
+		} catch (SQLException e) {
+			e.printStackTrace();
+	}
+	}
+	@Override
+	public JSONObject getinfo(HttpServletRequest request) {
+		Connection conn=null;
+		ResultSet rs=null;
+		PreparedStatement psta=null;
+		JSONObject json=new JSONObject();
+		try {
+			conn=JDBCutil_c3p0.getconn();
+			psta=conn.prepareStatement("select * from applicant"
+					+ " where ID=?");
+			psta.setString(1, (String)request.getParameter("ID"));
+			rs=psta.executeQuery();
+			if(rs.next()) {
+				json.put("ID", rs.getString("ID"));
+				json.put("name", rs.getString("name"));
+				json.put("country", rs.getString("country"));
+				if(rs.getString("gender").equals("male"))
+				json.put("gender", "男");
+				else
+					json.put("gender", "女");
+				String phone=rs.getString("phone");
+				if(phone!=null&&phone.length()!=0)
+				json.put("phone", phone);
+				else
+					json.put("phone", "无");
+				String email=rs.getString("email");
+				if(email!=null&&email.length()!=0)
+				json.put("email", email);
+				else
+					json.put("email", "无");
+				String pos_name=rs.getString("pos_name");
+				if(pos_name!=null&&pos_name.length()!=0)
+				json.put("pos_name", pos_name);
+				else
+					json.put("pos_name", "无");
+				String com_ID=rs.getString("com_ID");
+				if(com_ID!=null&&com_ID.length()!=0)
+				json.put("com_ID", com_ID);
+				else
+					json.put("com_ID", "无");
+				json.put("avator", rs.getString("avator"));
+			}
+			JDBCutil_c3p0.release(rs, psta, conn);
+		} catch (SQLException e) {
+			e.printStackTrace();
+	}
+		return json;
+	}
+	@Override
+	public String updateavator(HttpServletRequest request, String filepath) {
+		HttpSession session = request.getSession();
+        String ID=(String) session.getAttribute("ID");
+        
+		Connection conn=null;
+		ResultSet rs=null;
+		PreparedStatement psta=null;
+		String oldfile=null;
+		try {
+			conn=JDBCutil_c3p0.getconn();
+			psta=conn.prepareStatement("select * from applicant"
+					+ " where ID=?");
+			psta.setString(1, ID);
+			rs=psta.executeQuery();
+			if(rs.next()) {
+				oldfile=rs.getString("avator");
+			psta=conn.prepareStatement(
+					"update applicant"
+					+ " set avator=?"
+					+ " where ID=? ");
+			psta.setString(1, filepath);
+			psta.setString(2, ID);
+			psta.executeUpdate();
+			}
+			JDBCutil_c3p0.release(rs, psta, conn);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return oldfile;
+	}
+	@Override
+	public String updateinfo(HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		String info="";
+		String name=request.getParameter("name");
+		String phone=request.getParameter("phone");
+		String email=request.getParameter("email");
+		Connection conn=null;
+		ResultSet rs=null;
+		PreparedStatement psta=null;
+		try {
+			conn=JDBCutil_c3p0.getconn();
+			psta=conn.prepareStatement(
+					"update applicant"
+					+ " set name=?, phone=?, email=?"
+					+ " where ID=? ");
+			psta.setString(1, name);
+			psta.setString(2, phone);
+			psta.setString(3, email);
+			psta.setString(4, (String) session.getAttribute("ID"));
+			psta.executeUpdate();
+			session.setAttribute("name", name);
+			JDBCutil_c3p0.release(rs, psta, conn);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return info;
 	}
 }

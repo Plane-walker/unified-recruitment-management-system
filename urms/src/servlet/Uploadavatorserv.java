@@ -17,20 +17,22 @@ import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
+import account.Account;
 import account.Applicant;
+import account.Company;
 import net.sf.json.JSONObject;
 
 /**
- * Servlet implementation class Uploadserv
+ * Servlet implementation class Uploadavatorserv
  */
-@WebServlet("/Uploadserv")
-public class Uploadserv extends HttpServlet {
+@WebServlet("/Uploadavatorserv")
+public class Uploadavatorserv extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public Uploadserv() {
+    public Uploadavatorserv() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -45,16 +47,17 @@ public class Uploadserv extends HttpServlet {
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException { 
 		DiskFileItemFactory dfif = new DiskFileItemFactory();
 		 String filePath ="";
+		 String storepath="";
 	        dfif.setSizeThreshold(1024*1024*8);
 	        dfif.setRepository(new File("java.io.tmpdir"));
 	        ServletFileUpload upload = new ServletFileUpload(dfif);
 	        upload.setSizeMax(1024*1024*50);
 	        String uploadPath = this.getServletContext().getRealPath("");
 	        HttpSession session = request.getSession();
-	        uploadPath = uploadPath+"files\\"+(String)session.getAttribute("ID");
+	        uploadPath = uploadPath+"images\\"+(String)session.getAttribute("ID");
 	        File uploadDir = new File(uploadPath);
 	        if(!uploadDir.exists()){
 	            uploadDir.mkdir();
@@ -65,9 +68,11 @@ public class Uploadserv extends HttpServlet {
 	                for(FileItem item : formItem){
 	                    if(!item.isFormField()){
 	                        String fileName = new File(item.getName()).getName();
-	                        Random rand=new Random();
 	                        Applicant app=new Applicant();
-	                        filePath = uploadPath+"\\"+app.getmd5(""+System.currentTimeMillis())+"_"+fileName;
+	                        String fname=app.getmd5(""+System.currentTimeMillis())+"_"+fileName;
+	                        filePath = uploadPath+"\\"+fname;
+	                        storepath="images/"+(String)session.getAttribute("ID")+"\\"+fname;
+	                        session.setAttribute("avator", storepath);
 	                        File storeFile = new File(filePath);
 	                        item.write(storeFile);
 	                    }
@@ -78,8 +83,18 @@ public class Uploadserv extends HttpServlet {
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	        }
-	        Applicant acc=new Applicant();
-	        acc.applyupdate(request,filePath);
+	        Account acc=null;
+	        if(((String)session.getAttribute("type")).equals("login_app")||((String)session.getAttribute("type")).equals("register_app"))
+				acc=new Applicant();
+			else
+				acc=new Company();
+	        String delfile=acc.updateavator(request,storepath);	        
+	        if(!delfile.equals("images/origin.jpg")) {
+	        	delfile=this.getServletContext().getRealPath("")+delfile;
+	        	File file = new File(delfile);  
+		        if (file.exists() && file.isFile())
+		        	file.delete();
+	        }
 	        JSONObject json=new JSONObject();
 	        json.put("message","success");
 	        response.setCharacterEncoding("utf-8");

@@ -6,23 +6,21 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
-import net.sf.json.JSONArray;
+import account.Applicant;
 import net.sf.json.JSONObject;
-import position.Position;
 
 /**
- * Servlet implementation class Publish
+ * Servlet implementation class Disemployserv
  */
-@WebServlet("/Publishserv")
-public class Publishserv extends HttpServlet {
+@WebServlet("/Disemployserv")
+public class Disemployserv extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public Publishserv() {
+    public Disemployserv() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -38,11 +36,9 @@ public class Publishserv extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.setCharacterEncoding("UTF-8");
-		Position pos=new Position();
-		String info=pos.publish(request);
-			JSONObject json=new JSONObject();
-			json.put("info", info);
+		Applicant app=new Applicant();
+		app.disemploy(request);
+		JSONObject json=new JSONObject();
 		response.setCharacterEncoding("utf-8");
 		response.setContentType("application/json; charset=utf-8");
         response.getWriter().print(json.toString());

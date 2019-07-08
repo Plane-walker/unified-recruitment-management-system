@@ -8,21 +8,23 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import net.sf.json.JSONArray;
+import account.Account;
+import account.Applicant;
+import account.Company;
 import net.sf.json.JSONObject;
 import position.Position;
 
 /**
- * Servlet implementation class Publish
+ * Servlet implementation class Updateinfo
  */
-@WebServlet("/Publishserv")
-public class Publishserv extends HttpServlet {
+@WebServlet("/Updateinfoserv")
+public class Updateinfoserv extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public Publishserv() {
+    public Updateinfoserv() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -39,8 +41,13 @@ public class Publishserv extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
-		Position pos=new Position();
-		String info=pos.publish(request);
+		HttpSession session = request.getSession();
+		Account acc=null;
+		if(((String)session.getAttribute("type")).equals("login_app")||((String)session.getAttribute("type")).equals("register_app"))
+			acc=new Applicant();
+		else
+			acc=new Company();
+		String info=acc.updateinfo(request);
 			JSONObject json=new JSONObject();
 			json.put("info", info);
 		response.setCharacterEncoding("utf-8");

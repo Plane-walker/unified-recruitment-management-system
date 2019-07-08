@@ -4,6 +4,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 import javax.servlet.http.HttpServletRequest;
+import net.sf.json.JSONObject;
 
 abstract public class Account {
 	String ID=null;
@@ -12,6 +13,9 @@ abstract public class Account {
 	String avator=null;
 	public abstract String login(HttpServletRequest request);
 	public abstract String register(HttpServletRequest request);
+	public abstract JSONObject getinfo(HttpServletRequest request);
+	public abstract String updateavator(HttpServletRequest request,String filepath);
+	public abstract String updateinfo(HttpServletRequest request);
 	public void setID(String ID) {
 		if(this.ID==null)
 		this.ID=ID;

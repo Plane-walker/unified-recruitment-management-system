@@ -1,5 +1,5 @@
 body {
-	padding-top: 70px;
+	padding-top: 60px;
     font-family: 'Poppins', sans-serif;
     background: #fafafa;
 }
@@ -175,6 +175,9 @@ a.article:hover {
 	border:none;
 	background-color:rgba(0,0,0,0);
 }
+.topbar{
+	height:60px;
+}
 .details{
 	
 }
@@ -212,5 +215,14 @@ a.article:hover {
 	
 }
 .meetingarr{
+	
+}
+.disemploy{
+	
+}
+.applicantID{
+	
+}
+.updateavator{
 	
 }

@@ -16,10 +16,14 @@ public class Position {
 	String name;
 	String information;
 	String city;
+	String avator;
 	double salary;
 	String academic;
 	int number;
 	String type;
+	public String getavator() {
+		return avator;
+	}
 	public String getcom_ID() {
 		return com_ID;
 	}
@@ -101,7 +105,7 @@ public class Position {
 			conn=JDBCutil_c3p0.getconn();
 			psta=conn.prepareStatement("select * from positions"
 					+ " where LOCATE(?, name)>0 and LOCATE(?, com_name)>0"
-					+ " order by hits desc limit ?, 1 ");
+					+ " order by hits desc, com_ID limit ?, 1 ");
 			psta.setString(1, (String)request.getParameter("pos_name"));
 			psta.setString(2, (String)request.getParameter("com_name"));
 			psta.setInt(3, size-1);
@@ -163,7 +167,7 @@ public class Position {
 			conn=JDBCutil_c3p0.getconn();
 			psta=conn.prepareStatement("select * from positions"
 					+ " where com_ID=? and LOCATE(?, name)>0 and LOCATE(?, com_name)>0"
-					+ " order by hits desc limit ?, 1");
+					+ " order by hits desc, com_ID limit ?, 1");
 			psta.setString(1, (String)request.getParameter("com_ID"));
 			psta.setString(2, (String)request.getParameter("pos_name"));
 			psta.setString(3, (String)request.getParameter("com_name"));
@@ -183,7 +187,7 @@ public class Position {
 			conn=JDBCutil_c3p0.getconn();
 			psta=conn.prepareStatement("select * from positions"
 					+ " where type=? and LOCATE(?, name)>0 and LOCATE(?, com_name)>0"
-					+ " order by hits desc limit ?, 1");
+					+ " order by hits desc, com_ID limit ?, 1");
 			psta.setString(1, (String)request.getParameter("type"));
 			psta.setString(2, (String)request.getParameter("pos_name"));
 			psta.setString(3, (String)request.getParameter("com_name"));
@@ -207,6 +211,21 @@ public class Position {
 				this.salary=Double.valueOf(rs.getString("salary"));
 				this.number=Integer.valueOf(rs.getString("number"));
 				this.type=rs.getString("type");
+				Connection conn=null;
+				ResultSet rs2=null;
+				PreparedStatement psta=null;
+				try {
+					conn=JDBCutil_c3p0.getconn();
+					psta=conn.prepareStatement("select * from company"
+							+ " where ID=?");
+					psta.setString(1, com_ID);
+					rs2=psta.executeQuery();
+					if(rs2.next())
+						this.avator=rs2.getString("avator");
+					JDBCutil_c3p0.release(rs, psta, conn);
+				} catch (SQLException e) {
+					e.printStackTrace();
+			}
 			}
 		} catch (NumberFormatException e) {
 			e.printStackTrace();

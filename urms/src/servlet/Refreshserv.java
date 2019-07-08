@@ -69,6 +69,7 @@ public class Refreshserv extends HttpServlet {
 			json.put("salary", pos[i].getsalary());
 			json.put("number", pos[i].getnumber());
 			json.put("type", pos[i].gettype());
+			json.put("avator", pos[i].getavator());
 			jsona.put(json);
 			}
 		}

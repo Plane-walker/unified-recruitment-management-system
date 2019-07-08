@@ -8,21 +8,23 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import account.Account;
+import account.Applicant;
+import account.Company;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-import position.Position;
 
 /**
- * Servlet implementation class Publish
+ * Servlet implementation class Accinfoserv
  */
-@WebServlet("/Publishserv")
-public class Publishserv extends HttpServlet {
+@WebServlet("/Accinfoserv")
+public class Accinfoserv extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public Publishserv() {
+    public Accinfoserv() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -39,10 +41,14 @@ public class Publishserv extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
-		Position pos=new Position();
-		String info=pos.publish(request);
-			JSONObject json=new JSONObject();
-			json.put("info", info);
+		HttpSession session = request.getSession();
+		Account app=null;
+		if(((String)session.getAttribute("type")).equals("login_app")||((String)session.getAttribute("type")).equals("register_app"))
+			app=new Applicant();
+		else
+			app=new Company();
+		JSONObject json=null;
+		json=app.getinfo(request);	
 		response.setCharacterEncoding("utf-8");
 		response.setContentType("application/json; charset=utf-8");
         response.getWriter().print(json.toString());
