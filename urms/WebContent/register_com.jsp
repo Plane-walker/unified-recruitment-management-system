@@ -48,8 +48,8 @@ request.setCharacterEncoding("utf-8"); %>
         </div>
         <div class="form-group form-inline">
             <div class="col-md-4"><input class="btn btn-primary" type="submit" value="注册"></div>
-            <div class="col-md-4"><a href="login_com">登录</a></div>
-            <div class="col-md-4"><font color="red"><%if((String)session.getAttribute("regwarn")!=null)out.print((String)session.getAttribute("regwarn"));%></font></div>
+            <div class="col-md-2"><a href="login_com">登录</a></div>
+            <div class="col-md-6"><font color="red"><%if((String)session.getAttribute("regwarn")!=null)out.print((String)session.getAttribute("regwarn"));%></font></div>
         </div>
 </form>
 </div>

@@ -71,7 +71,7 @@ public class Uploadavatorserv extends HttpServlet {
 	                        Applicant app=new Applicant();
 	                        String fname=app.getmd5(""+System.currentTimeMillis())+"_"+fileName;
 	                        filePath = uploadPath+"\\"+fname;
-	                        storepath="images/"+(String)session.getAttribute("ID")+"\\"+fname;
+	                        storepath="image\\"+(String)session.getAttribute("ID")+"\\"+fname;
 	                        session.setAttribute("avator", storepath);
 	                        File storeFile = new File(filePath);
 	                        item.write(storeFile);

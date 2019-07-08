@@ -154,6 +154,12 @@ public String getpos_name() {
 		PreparedStatement psta=null;
 		try {
 			conn=JDBCutil_c3p0.getconn();
+			psta=conn.prepareStatement("select * from applicant"
+					+ " where ID=?");
+			psta.setString(1, ID);
+			rs=psta.executeQuery();
+			if(rs.next()) {
+				if(rs.getString("com_ID")==null) {
 			psta=conn.prepareStatement("select * from apply"
 					+ " where app_ID=? and com_ID=? and name=?");
 			psta.setString(1, ID);
@@ -179,6 +185,11 @@ public String getpos_name() {
 			}
 			else {
 				info="请勿重复申请！";
+			}
+				}
+				else {
+					info="已任职，无法申请！";
+				}
 			}
 			JDBCutil_c3p0.release(rs, psta, conn);
 		} catch (SQLException e) {
