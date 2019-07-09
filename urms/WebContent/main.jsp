@@ -9,6 +9,11 @@
 <meta charset="UTF-8">
 <title>统一招聘管理系统</title>
 <%session.removeAttribute("logwarn");session.removeAttribute("regwarn");%>
+<style>
+body {
+	padding-top: 60px;
+}
+</style>
 </head>
 <body>
 <div class='card mb-4 shadow-sm col-md-4 offset-4'>

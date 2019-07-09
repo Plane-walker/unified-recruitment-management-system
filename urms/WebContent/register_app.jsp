@@ -10,6 +10,11 @@
 <meta charset="UTF-8">
 <title>注册-统一招聘管理系统</title>
 <%session.removeAttribute("logwarn");%>
+<style>
+body {
+	padding-top: 60px;
+}
+</style>
 </head>
 <body>
 <% response.setContentType("text/html;charset=utf-8"); 
@@ -62,7 +67,7 @@ request.setCharacterEncoding("utf-8"); %>
             <input type="text" class="form-control col-md-6" ID="email" name="email" value="${email}" autocomplete="off">
         </div>
         <div class="form-group form-inline">
-            <div class="col-md-4"><input class="btn btn-primary" type="submit" value="注册"></div>
+            <div class="col-md-4"><input class="btn btn-outline-primary" type="submit" value="注册"></div>
             <div class="col-md-2"><a href="login_app">登录</a></div>
             <div class="col-md-6"><font color="red"><%if((String)session.getAttribute("regwarn")!=null)out.print((String)session.getAttribute("regwarn"));%></font></div>
         </div>

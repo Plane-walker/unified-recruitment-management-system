@@ -63,9 +63,8 @@ public class Company extends Account{
 		try {
 			conn=JDBCutil_c3p0.getconn();
 			psta=conn.prepareStatement("select * from company"
-					+ " where ID=? and pwHash=?");
+					+ " where ID=?");
 			psta.setString(1, userID);
-			psta.setString(2, pwHash);
 			rs=psta.executeQuery();
 			if(!rs.next()) {
 			psta=conn.prepareStatement(

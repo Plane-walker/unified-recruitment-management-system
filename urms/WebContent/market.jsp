@@ -7,7 +7,7 @@
 <link href="bootstrap-4.3.1-dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet">
 <link href="bootstrap-fileinput/css/fileinput.min.css" rel="stylesheet">
-<link href="style.css?v=1.7" rel="stylesheet">
+<link href="style.css?v=2.7" rel="stylesheet">
 <script type="text/javascript" src="jquery-3.4.1.min.js" ></script>
 <script type="text/javascript" src="bootstrap-4.3.1-dist/js/bootstrap.min.js" ></script>
 <script type="text/javascript" src="bootstrap-fileinput/js/fileinput.min.js" ></script>
@@ -30,15 +30,15 @@ function psw(){
 	var html="";
 	if(!(last&&page==1)){
 	if(page>1){
-		html+="<button class='control-label col-md-2 btn btn-info' onclick='switchh()'>首页</button>";
-		html+="<button class='control-label col-md-2 btn btn-info' onclick='switchp()'>上一页</button>";
+		html+="<button class='control-label col-md-2 btn btn-outline-info' onclick='switchh()'>首页</button>";
+		html+="<button class='control-label col-md-2 btn btn-outline-info' onclick='switchp()'>上一页</button>";
 	}
 	if(page>2)
 	html+="<a href='javascript:void(0);' onclick='return switchpp()' class='text-primary col-md-1' id='firstp'>1</a>";
 	if(page>1)
 	html+="<a href='javascript:void(0);' onclick='return switchp()' class='text-primary col-md-1' id='secondp'>2</a>";
 	html+="<a class='col-md-1' id='thirdp'>1</a>";
-    html+="<button class='control-label col-md-2 btn btn-info' onclick='switchl()'>下一页</button>";
+    html+="<button class='control-label col-md-2 btn btn-outline-info' onclick='switchl()'>下一页</button>";
     $("#pageswitch").html(html);
     $("#thirdp").html(page);
     if(page>1)
@@ -114,8 +114,11 @@ function refresh(){
 		   html+="<p class='card-title'>类型："+dates[i].type+"</p>";
 		   html+="<p class='card-title d-none'>详情："+dates[i].information+"</p>";
 		   html+="<input type='file' class='file-loading d-none' id='filepath' onchange='changeInput()'><br class='d-none'>";
-		   html+="<button class='btn btn-info details col-md-3'>详情</button>";
-		   html+="<button class='btn btn-warning offset-6 col-md-3 d-none sendrequest' onclick='openinput()'>应聘</button>";
+		   html+="<button class='btn btn-outline-info details col-md-3'>详情</button>";
+		   html+="<button class='btn btn-outline-warning offset-6 col-md-3 d-none sendrequest' onclick='openinput()'>应聘</button>";
+		   html+="<br><p class='card-title d-none'>评论：</p>";
+		   html+="<div class='card-title d-none commit'></div>";
+		   html+="<textarea class='commitinfo d-none'  value=''></textarea><br><button class='btn btn-outline-primary sendcommit col-md-4 d-none'>发表评论</button>";
 		   html+="</div></div>";
 			   if(i%3==2)
 			   html+="</div>";
@@ -195,7 +198,7 @@ function refresh(){
     		"</div>"+
 			"</form>"+
 			"<div class='form-group form-inline'>"+
-            "<div class='col-md-6'><button id='setinfo' class='btn btn-primary' onclick='return updateinfo()'>保存修改</button></div>"+
+            "<div class='col-md-6'><button id='setinfo' class='btn btn-outline-primary' onclick='return updateinfo()'>保存修改</button></div>"+
             "<div class='col-md-8' id='updatewarn'></div>"+
         "</div>";
 		  $("#poscard").html(html);
@@ -332,10 +335,10 @@ function updateinfo(){
         </ul>
     </nav>
 <div id="content">
-    <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light p-3 mb-5 topbar bg-white rounded shadow-sm">
+    <nav class="navbar fixed-top rounded shadow-sm topbar">
         <div class="container-fluid">
 
-            <button type="button" id="sidebarCollapse" class="btn btn-info">
+            <button type="button" id="sidebarCollapse" class="btn btn-outline-info">
                 <i class="fa fa-fw fa-bars"></i>
                 <span></span>
             </button>
@@ -345,7 +348,7 @@ function updateinfo(){
             <option value="com">公司名</option>
             </select>
 				<input class="form-control" type="text" ID="searchcon" value="" autocomplete="off" placeholder="">
-				<button class="btn btn-info"  onclick="return search()"><i class='fa fa-fw fa-search'></i></button>
+				<button class="btn btn-outline-info"  onclick="return search()"><i class='fa fa-fw fa-search'></i></button>
 			</div>
         </div>
     </nav>
@@ -377,7 +380,7 @@ $(document).ready(function () {
             showUpload: false,
             showCaption: false,
             enctype: 'multipart/form-data',
-            browseClass: "btn btn-primary chobutton",           
+            browseClass: "btn btn-outline-primary chobutton",           
             previewFileIcon: "<i class='glyphicon glyphicon-king'></i>",
             dropZoneTitle: "上传相关材料<br>多个文件请打包",
             maxFileCount: 1,
@@ -388,7 +391,47 @@ $(document).ready(function () {
     	.on("filecleared",function(event, data, msg){
 		usefile=false;
     	});
+    	url="Commitserv";
+    	data={"com_ID":aimcard.children().children(".companyid").html(),"pos_name":aimcard.children().children(".positionname").html()};
+    	$.ajax({
+ 		   type :"post",
+ 		   dataType: "json",
+ 		   url : url,
+ 		   data : data,
+ 		   timeout:1000,
+ 		   success:function(dates){
+ 			  var html="";
+ 			   if(dates.length==0)
+ 				   html+="<p class='text-warning'>无任何评论</p>";
+ 				   else{
+ 			   for(var i=0;i<dates.length;i++)
+ 				   html+="<p class='card-title text-left'><img src='"+dates[i].avator+"' class='rounded-circle' width='30' height='30'/>"+dates[i].app_name+"："+dates[i].commit+"</p>";
+ 			   }
+ 			   $(".commit").html(html);
+ 		   },
+ 		   error:function() {
+ 		       }
+ 		  });
     });
+    $("#poscard").on('click','.sendcommit',function () {
+		 var aimcard=$(this).parent().parent();
+		   var url = "Sendcommitserv";
+			  var statusdata = {"com_ID":aimcard.children().children(".companyid").html(),"pos_name":aimcard.children().children(".positionname").html(),"commit":$(".commitinfo").val()};
+			  $.ajax({
+			   type :"post",
+			   dataType: "json",
+			   url : url,
+			   data : statusdata,
+			   timeout:1000,
+			   success:function(dates){
+				 var html="";
+				   html+="<p class='text-info'>评论成功</p>";
+				$("#poscard").html(html);
+			   },
+			   error:function() {
+			       }
+	 });
+		  });
     $("#poscard").on('click','.sendrequest',function () {
     	var aimcard=$(this).parent().parent();
     	var url = "Applyserv";

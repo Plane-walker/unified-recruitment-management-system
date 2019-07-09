@@ -100,6 +100,8 @@ public String getpos_name() {
 		String username=request.getParameter("username");
         String gender=request.getParameter("gender");
         String country=request.getParameter("country");
+        String phone=request.getParameter("phone");
+        String email=request.getParameter("email");
 		String pwHash=getmd5(request.getParameter("password"));
 		if(userID == null || userID.trim().equals(""))
 			info="用户名不能为空！";
@@ -121,20 +123,21 @@ public String getpos_name() {
 		try {
 			conn=JDBCutil_c3p0.getconn();
 			psta=conn.prepareStatement("select * from applicant"
-					+ " where ID=? and pwHash=?");
+					+ " where ID=?");
 			psta.setString(1, userID);
-			psta.setString(2, pwHash);
 			rs=psta.executeQuery();
 			if(!rs.next()) {
 			psta=conn.prepareStatement(
-					"insert into applicant(ID,name,pwHash,gender,country,avator)"
-					+ " value(?,?,?,?,?,?) ");
+					"insert into applicant(ID,name,pwHash,gender,country,avator,phone,email)"
+					+ " value(?,?,?,?,?,?,?,?) ");
 			psta.setString(1, userID);
 			psta.setString(2, username);
 			psta.setString(3, pwHash);
 			psta.setString(4, gender);
 			psta.setString(5, country);
 			psta.setString(6, "images/origin.jpg");
+			psta.setString(7, phone);
+			psta.setString(8, email);
 			psta.executeUpdate();
 			}
 			else {

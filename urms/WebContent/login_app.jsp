@@ -9,6 +9,11 @@
 <meta charset="UTF-8">
 <title>登录-统一招聘管理系统</title>
 <%session.removeAttribute("regwarn");%>
+<style>
+body {
+	padding-top: 60px;
+}
+</style>
 </head>
 <body>
 <div class='card mb-4 shadow col-md-4 offset-4'>
@@ -26,7 +31,7 @@
             <input type="password" class="form-control col-md-6" name="password" value="${password}" autocomplete="off">
         </div>
         <div class="form-group form-inline">
-            <div class="col-md-4"><input class="btn btn-primary" type="submit" value="登录"></div>
+            <div class="col-md-4"><input class="btn btn-outline-primary" type="submit" value="登录"></div>
             <div class="col-md-2"><a href="register_app">注册</a></div>
             <div class="col-md-6"><font color="red"><%if((String)session.getAttribute("logwarn")!=null)out.print((String)session.getAttribute("logwarn"));%></font></div>
             </div>

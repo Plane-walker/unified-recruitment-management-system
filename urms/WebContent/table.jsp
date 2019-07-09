@@ -7,7 +7,7 @@
 <link href="bootstrap-4.3.1-dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="bootstrap-fileinput/css/fileinput.min.css" rel="stylesheet">
 <link href="font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet">
-<link href="style.css?v=1.2" rel="stylesheet">
+<link href="style.css?v=1.4" rel="stylesheet">
 <script type="text/javascript" src="jquery-3.4.1.min.js" ></script>
 <script type="text/javascript" src="bootstrap-fileinput/js/fileinput.min.js" ></script>
 <script type="text/javascript" src="bootstrap-fileinput/js/locales/zh.js" ></script>
@@ -15,7 +15,6 @@
 
 <meta charset="UTF-8">
 <title>招聘中心-统一招聘管理系统</title>
-
 </head>
 <body>
 <script type="text/javascript">
@@ -30,15 +29,15 @@ function psw(){
 	var html="";
 	if(!(last&&page==1)){
 	if(page>1){
-		html+="<button class='control-label col-md-2 btn btn-info' onclick='switchh()'>首页</button>";
-		html+="<button class='control-label col-md-2 btn btn-info' onclick='switchp()'>上一页</button>";
+		html+="<button class='control-label col-md-2 btn btn-outline-info' onclick='switchh()'>首页</button>";
+		html+="<button class='control-label col-md-2 btn btn-outline-info' onclick='switchp()'>上一页</button>";
 	}
 	if(page>2)
 	html+="<a href='javascript:void(0);' onclick='return switchpp()' class='text-primary col-md-1 text-center' id='firstp'>1</a>";
 	if(page>1)
 	html+="<a href='javascript:void(0);' onclick='return switchp()' class='text-primary col-md-1 text-center' id='secondp'>2</a>";
 	html+="<a class='col-md-1' id='thirdp'>1</a>";
-    html+="<button class='control-label col-md-2 btn btn-info' onclick='switchl()'>下一页</button>";
+    html+="<button class='control-label col-md-2 btn btn-outline-info' onclick='switchl()'>下一页</button>";
     $("#pageswitch").html(html);
     $("#thirdp").html(page);
     if(page>1)
@@ -113,7 +112,7 @@ function refresh(){
 		   html+="<p class='card-title'>类型："+dates[i].type+"</p>";
 		   html+="<p class='card-title d-none'>详情："+dates[i].information+"</p>";
 		   html+="<div class='d-none appinfo'></div>";
-		   html+="<button class='btn btn-primary details'>处理</button>";
+		   html+="<button class='btn btn-outline-primary details'>处理</button>";
 		   html+="</div></div>";
 			   if(i%3==2)
 			   html+="</div>";
@@ -165,7 +164,7 @@ function refresh(){
 					   html+="<p class='card-title'>联系电话："+dates[i].phone+"</p>";
 					   html+="<p class='card-title'>邮箱："+dates[i].email+"</p>";
 					   html+="<p class='card-title'>职位："+dates[i].pos_name+"</p>";
-					   html+="<button class='btn btn-primary disemploy'>解聘</button>";
+					   html+="<button class='btn btn-outline-primary disemploy'>解聘</button>";
 					   html+="</div></div>";
 						   if(i%3==2)
 						   html+="</div>";
@@ -240,7 +239,7 @@ function refresh(){
     		"<textarea class='form-control col-md-6' name='information' value='${information}'></textarea>"+
 			"</div></form>"+
 			"<div class='form-group form-inline'>"+
-            "<div class='col-md-4'><button id='publish' class='btn btn-primary' onclick='return publishpos()'>发布</button></div>"+
+            "<div class='col-md-4'><button id='publish' class='btn btn-outline-primary' onclick='return publishpos()'>发布</button></div>"+
             "<div class='col-md-8' id='publishwarn'></div>"+
         "</div>";
 		  $("#poscard").html(html);
@@ -280,7 +279,7 @@ function refresh(){
     		"</div>"+
 			"</form>"+
 			"<div class='form-group form-inline'>"+
-            "<div class='col-md-6'><button id='setinfo' class='btn btn-primary' onclick='return updateinfo()'>保存修改</button></div>"+
+            "<div class='col-md-6'><button id='setinfo' class='btn btn-outline-primary' onclick='return updateinfo()'>保存修改</button></div>"+
             "<div class='col-md-8' id='updatewarn'></div>"+
         "</div>";
 		  $("#poscard").html(html);
@@ -402,10 +401,10 @@ $(function(){
         </ul>
     </nav>
 <div id="content">
-    <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light p-3 mb-5 topbar bg-white rounded shadow-sm">
+    <nav class="navbar fixed-top rounded shadow-sm topbar">
         <div class="container-fluid">
 
-            <button type="button" id="sidebarCollapse" class="btn btn-info">
+            <button type="button" id="sidebarCollapse" class="btn btn-outline-info">
                 <i class="fa fa-fw fa-bars"></i>
                 <span></span>
             </button>
@@ -415,7 +414,7 @@ $(function(){
             <option value="com">公司名</option>
             </select>
 				<input class="form-control" type="text" ID="searchcon" value="" autocomplete="off" placeholder="">
-				<button class="btn btn-info"  onclick="return search()"><i class='fa fa-fw fa-search'></i></button>
+				<button class="btn btn-outline-info"  onclick="return search()"><i class='fa fa-fw fa-search'></i></button>
 			</div>
         </div>
     </nav>
@@ -469,14 +468,14 @@ $(document).ready(function () {
     			   else
     				   html+="<p class='card-title'>未提供材料</p>";
     				   if(dates[i].status!="meeting"){
-    			   html+="<button class='btn btn-info meeting'>安排面试</button><div class='d-none meetingarr'><br>"+
-    	    		"<textarea class='meetinginfo'  value=''></textarea><br><button class='btn btn-primary sendmeeting'>发送</button></div><br><br>";
+    			   html+="<button class='btn btn-outline-info meeting'>安排面试</button><div class='d-none meetingarr'><br>"+
+    	    		"<textarea class='meetinginfo'  value=''></textarea><br><button class='btn btn-outline-primary sendmeeting'>发送</button></div><br><br>";
     				   }
     				   else{
-    					   html+="<button class='btn btn-info disabled'>已安排面试</button><br><p class='card-title'>详细信息："+dates[i].information+"</p><br><br>";
+    					   html+="<button class='btn btn-outline-info disabled'>已安排面试</button><br><p class='card-title'>详细信息："+dates[i].information+"</p><br><br>";
     				   }
-    			   html+="<button class='btn btn-warning finaldec col-md-3'>拒绝</button>";
-    			   html+="<button class='btn btn-warning finaldec col-md-3 offset-6'>接受</button>";
+    			   html+="<button class='btn btn-outline-warning finaldec col-md-3'>拒绝</button>";
+    			   html+="<button class='btn btn-outline-warning finaldec col-md-3 offset-6'>接受</button>";
     			   html+="</div></div>";
     			   }
     			   

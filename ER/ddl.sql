@@ -27,7 +27,7 @@ create table applicant
    name                 varchar(30) not null,
    com_ID               varchar(30),
    pos_name             varchar(30),
-   gender               varchar(4) not null,
+   gender               varchar(10) not null,
    country              varchar(30) not null,
    phone                varchar(30),
    email                varchar(40),
@@ -80,24 +80,26 @@ alter table apply add constraint FK_Reference_1 foreign key (app_ID)
 alter table apply add constraint FK_Reference_5 foreign key (com_ID, name)
       references positions (com_ID, name) on delete restrict on update restrict;
 
-
 /*==============================================================*/
 /* Table: comments                                              */
 /*==============================================================*/
 create table comments
 (
+   datetime             datetime not null,
    app_ID               varchar(30) not null,
    com_ID               varchar(30) not null,
-   datetime             datetime not null,
+   name                 varchar(30) not null,
    comment              varchar(200) not null,
-   primary key (app_ID, com_ID, datetime)
+   primary key (datetime, app_ID, com_ID, name)
 );
 
 alter table comments add constraint FK_Reference_6 foreign key (app_ID)
       references applicant (ID) on delete restrict on update restrict;
 
-alter table comments add constraint FK_Reference_7 foreign key (com_ID)
-      references company (ID) on delete restrict on update restrict;
+alter table comments add constraint FK_Reference_7 foreign key (com_ID, name)
+      references positions (com_ID, name) on delete restrict on update restrict;
+
+
 
 drop trigger if exists employ;
 DELIMITER !!
@@ -107,6 +109,25 @@ if new.com_ID is not null then
 delete from apply
 where app_ID=new.ID;
 end if;
+end
+!!
+DELIMITER ;
+drop trigger if exists commentdel;
+DELIMITER !!
+create trigger commentdel before delete on positions for each row
+begin
+delete from comments
+where comments.com_ID=old.com_ID and comments.name=old.name;
+end
+!!
+DELIMITER ;
+drop trigger if exists commentadd;
+DELIMITER !!
+create trigger commentadd after insert on comments for each row
+begin
+update positions
+set positions.hits=positions.hits+1
+where positions.com_ID=new.com_ID and positions.name=new.name;
 end
 !!
 DELIMITER ;

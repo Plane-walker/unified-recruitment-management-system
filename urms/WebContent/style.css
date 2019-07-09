@@ -177,6 +177,7 @@ a.article:hover {
 }
 .topbar{
 	height:60px;
+	background-color: rgba(255,255,255,0.3);
 }
 .details{
 	
@@ -224,5 +225,14 @@ a.article:hover {
 	
 }
 .updateavator{
+	
+}
+.commit{
+	
+}
+.sendcommit{
+	
+}
+.commitinfo{
 	
 }
