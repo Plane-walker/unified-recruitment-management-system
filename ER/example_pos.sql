@@ -17,3 +17,7 @@ insert into positions value("Tencent","腾讯","投资经理","",0,10000,"杭州
 insert into positions value("Alibaba","阿里巴巴","投资经理","",0,10000,"杭州","本科",10,"金融");
 insert into positions value("Alibaba","阿里巴巴","电气工程师","",0,100000,"杭州","本科",2,"建筑");
 insert into positions value("Ubisoft","育碧","餐饮主管","熟悉土豆加工",0,100000,"蒙特利尔","博士",1,"服务");
+insert into positions value("Facebook","Facebook","java程序员","精通java",0,100000,"旧金山","本科",7,"IT");
+insert into positions value("Blume","布鲁姆","舆情监控","精通ctos",0,100000,"伦敦","博士",20,"IT");
+insert into positions value("Abstergo","阿布斯泰戈工业公司","DNA研究员","有较高的专业素养，有预防风险的能力",0,100000,"伦敦","博士",10,"其他");
+insert into positions value("Facebook","Facebook","大数据工程师","精通数据挖掘，有引导舆论的专业知识",0,100000,"伦敦","博士",50,"IT");

@@ -19,6 +19,11 @@ String email;
 String pos_name;
 String filepath;
 String information;
+String status;
+public void setstatus(String status) {
+	if(this.status==null)
+	this.status=status;
+}
 public void setfilepath(String filepath) {
 	if(this.filepath==null)
 	this.filepath=filepath;
@@ -38,6 +43,9 @@ public void setphone(String phone) {
 public void setemail(String email) {
 	if(this.email==null)
 	this.email=email;
+}
+public String getstatus() {
+	return status;
 }
 public String getinformation() {
 	return information;
@@ -168,8 +176,8 @@ public String getpos_name() {
 			rs=psta.executeQuery();
 			if(!rs.next()) {
 			psta=conn.prepareStatement(
-					"insert into apply(app_ID,com_ID,name,material,status,information)"
-					+ " value(?,?,?,?,'active','') ");
+					"insert into apply(app_ID,com_ID,name,material,status,information,datetime)"
+					+ " value(?,?,?,?,'active','',now()) ");
 			psta.setString(1, ID);
 			psta.setString(2, com_ID);
 			psta.setString(3, pos_name);
@@ -256,6 +264,7 @@ public String getpos_name() {
 				out[i].setfilepath(rs.getString("material"));
 				out[i].setinformation(rs.getString("information"));
 				out[i].setavator(rs.getString("avator"));
+				out[i].setstatus(rs.getString("status"));
 			}
 			JDBCutil_c3p0.release(rs, psta, conn);
 		} catch (SQLException e) {

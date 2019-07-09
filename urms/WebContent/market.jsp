@@ -205,6 +205,33 @@ function refresh(){
 		       }
 		  });
 	  };
+	  function belltower(){
+		  var url = "Bellserv";
+		  var data = {ID:"<%out.print((String)session.getAttribute("ID"));%>",type:"<%out.print((String)session.getAttribute("type"));%>"};
+		  $.ajax({
+		   type :"post",
+		   dataType: "json",
+		   url : url,
+		   data : data,
+		   timeout:1000,
+		   success:function(dates){
+			   var html="";
+			   if(dates.length==0)
+				   html+="<p class='text-warning'>无系统消息</p>";
+    		   for(var i=0;i<dates.length;i++){
+    			   html+="<div class='card mb-4 shadow col-md-4 offset-4'>";
+    			   html+="<div class='card-body text-center'>";
+    			   html+="<h4 class='card-title'><img src='"+dates[i].avator+"' class='rounded-circle' width='50' height='50'/><label class='applicantid'>"+dates[i].com_name+"</label></h4>";
+    				html+="<p class='card-title'>"+dates[i].information+"</p>";
+    			   html+="</div></div>"; 
+    		   }
+		  $("#poscard").html(html);
+		  $("#pageswitch").html("");
+		   },
+		   error:function() {
+		       }
+		  });
+	  };
 	  function search(){
 		  com_name="";
 		  pos_name="";
@@ -296,7 +323,7 @@ function updateinfo(){
                 </ul>
             </li>
             <li>
-                <a href="#"><i class="fa fa-fw fa-bell"></i> 消息</a>
+                <a href="#" onclick="return belltower()"><i class="fa fa-fw fa-bell"></i> 消息</a>
             </li>
             <li>
                 <a id="exit" href="javascript:void(0);" onclick="return exit()"><i class="fa fa-fw fa-power-off"></i> 退出登录</a>

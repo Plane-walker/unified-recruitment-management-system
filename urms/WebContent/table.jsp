@@ -396,9 +396,6 @@ $(function(){
                 <a href="#" onclick="return employee()"><i class="fa fa-fw fa-wrench"></i> 员工管理</a>
             </li>
             <li>
-                <a href="#"><i class="fa fa-fw fa-bell"></i> 消息</a>
-            </li>
-            <li>
                 <a id="exit" href="javascript:void(0);" onclick="return exit()"><i class="fa fa-fw fa-power-off"></i> 退出登录</a>
 
             </li>
@@ -455,6 +452,7 @@ $(document).ready(function () {
     	   success:function(dates){
     		   var html="";
     		   for(var i=0;i<dates.length;i++){
+    			   if(dates[i].status!="refuse"){
     			   html+="<div class='card mb-4 shadow text-center'>";
     			   html+="<div class='card-body'>";
     			   html+="<h4 class='card-title'><img src='"+dates[i].avator+"' class='rounded-circle' width='50' height='50'/><label class='applicantid'>"+dates[i].ID+"</label></h4>";
@@ -470,7 +468,7 @@ $(document).ready(function () {
     			   }
     			   else
     				   html+="<p class='card-title'>未提供材料</p>";
-    				   if(dates[i].information==""){
+    				   if(dates[i].status!="meeting"){
     			   html+="<button class='btn btn-info meeting'>安排面试</button><div class='d-none meetingarr'><br>"+
     	    		"<textarea class='meetinginfo'  value=''></textarea><br><button class='btn btn-primary sendmeeting'>发送</button></div><br><br>";
     				   }
@@ -480,6 +478,7 @@ $(document).ready(function () {
     			   html+="<button class='btn btn-warning finaldec col-md-3'>拒绝</button>";
     			   html+="<button class='btn btn-warning finaldec col-md-3 offset-6'>接受</button>";
     			   html+="</div></div>";
+    			   }
     			   
     		   }
     		   aimcard.children().children(".appinfo").html(html);

@@ -9,21 +9,21 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import account.Applicant;
+import apply.Apply;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-import position.Position;
 
 /**
- * Servlet implementation class Applyinfoserv
+ * Servlet implementation class Bellserv
  */
-@WebServlet("/Applyinfoserv")
-public class Applyinfoserv extends HttpServlet {
+@WebServlet("/Bellserv")
+public class Bellserv extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public Applyinfoserv() {
+    public Bellserv() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -40,34 +40,17 @@ public class Applyinfoserv extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
-		String pos_name=request.getParameter("pos_name");
 		HttpSession session = request.getSession();
-		String com_ID=(String) session.getAttribute("ID");
-		Applicant[] app=null;
-		Applicant temp=new Applicant();
+		String app_ID=(String) session.getAttribute("ID");
+		Apply[] app=null;
+		Apply temp=new Apply();
 		JSONArray jsona = new JSONArray();
-		app=temp.getallapp(com_ID, pos_name);
+		app=temp.getallinfo(app_ID);
 		for(int i=0;i<app.length;i++) {
 			JSONObject json=new JSONObject();
-			json.put("ID", app[i].getID());
-			json.put("name", app[i].getname());
-			if(app[i].getgender().equals("male"))
-			json.put("gender", "男");
-			else
-				json.put("gender", "女");
-			json.put("country", app[i].getcountry());
-			if(app[i].getphone()!=null&&app[i].getphone().length()!=0)
-			json.put("phone", app[i].getphone());
-			else
-				json.put("phone", "无");
-			if(app[i].getemail()!=null&&app[i].getemail().length()!=0)
-			json.put("email", app[i].getemail());
-			else
-				json.put("email", "无");
-				json.put("filepath", app[i].getfilepath());
-				json.put("information", app[i].getinformation());
+			json.put("information", app[i].getinformation());
+			json.put("com_name", app[i].getcom_name());
 				json.put("avator", app[i].getavator());
-				json.put("status", app[i].getstatus());
 			jsona.put(json);
 			}
 		response.setCharacterEncoding("utf-8");

@@ -70,6 +70,7 @@ create table apply
    material             varchar(200),
    status               varchar(10) not null,
    information          varchar(200),
+   datetime             datetime not null,
    primary key (app_ID, com_ID, name)
 );
 
@@ -78,6 +79,7 @@ alter table apply add constraint FK_Reference_1 foreign key (app_ID)
 
 alter table apply add constraint FK_Reference_5 foreign key (com_ID, name)
       references positions (com_ID, name) on delete restrict on update restrict;
+
 
 /*==============================================================*/
 /* Table: comments                                              */
